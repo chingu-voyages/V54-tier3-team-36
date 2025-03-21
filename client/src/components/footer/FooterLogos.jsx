@@ -10,27 +10,27 @@ function FooterLogos() {
       <img
         src={farmAnimals}
         alt="Farm Animals"
-        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover"
+        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover opacity-75"
       />
       <img
         src={LionPhoto}
         alt="Lion Photo"
-        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover"
+        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover opacity-75"
       />
       <img
         src={MultipleAnimals}
         alt="Multiple Animals"
-        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover"
+        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover opacity-75"
       />
       <img
         src={safariFun}
         alt="Safari Fun"
-        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover"
+        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover opacity-75"
       />
       <img
         src={safariLand}
         alt="Safari Land"
-        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover"
+        className="w-16 h-16 md:w-24 md:h-24 lg:w-28 lg:h-28 rounded-full object-cover opacity-75"
       />
     </div>
   );
