@@ -1,11 +1,15 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        footerWhiteColor: "#C6DAF1",
+        footerBackgroundColor: "#006666",
+        footerUserProfiles: "#004848",
+        footerLinkedinHoverColor: "#0072B1"
+      }
+    }
   },
-  plugins: [],
-}
+  darkMode: "class"
+};
