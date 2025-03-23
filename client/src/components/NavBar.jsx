@@ -1,16 +1,17 @@
 import React from 'react'
 import { NavLink } from "react-router";
+import AnimalWorld from "../assets/AnimalWorld.png"
 
 const NavBar = () => {
   const linkStyle = ({ isActive }) =>
-    `font-medium ${
-      isActive ? "text-blue-500" : "text-gray-900 dark:text-gray-300"
-    } whitespace-nowrap hover:text-blue-400 dark:hover:text-blue-400 mx-4 px-5 py-2`;
+    `text-xl ${
+      isActive ? "text-green-400" : "text-green-900"
+    } whitespace-nowrap hover:text-green-300 px-5`;
 
   return (
-    <>
-
-      <nav className='bg-blue-400'>
+    <div className='flex max-h-24 justify-between bg-blue-400'>
+      <img src={AnimalWorld} alt="logo" className='h-auto w-40 object-contain'/>
+      <nav className='flex items-center px-3'>
         <NavLink to="/" end className={linkStyle}> 
           Home 
         </NavLink>
@@ -26,8 +27,13 @@ const NavBar = () => {
         <NavLink to="dashboard" className={linkStyle}> 
           Dashboard
         </NavLink>
+        
+        <button>
+          Signup
+        </button>
+        
       </nav>
-    </>
+    </div>
   )
 }
 
