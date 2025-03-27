@@ -10,6 +10,8 @@ const HomeLayout = () => {
   const pageBg = "bg-white bg-opacity-0"
 
   return (
+    <>
+    
     <div className="md:min-h-screen flex items-center justify-center bg-contain md:bg-cover bg-center"
       style={{ backgroundImage: `url(${background})`}}>
       <div className="m-10 p-2 md:m-32 md:p-8 bg-white bg-opacity-75 rounded-[3vw] overflow-hidden">
@@ -31,11 +33,12 @@ const HomeLayout = () => {
 
         </div>
 
-        <div className="w-full">
-          <Footer />
-        </div>
       </div>
     </div>
+    <div className="w-full">
+      <Footer />
+    </div>
+    </>
   );
 };
 
