@@ -4,12 +4,11 @@ import HomeLayout from "./layout/HomeLayout";
 import GamesLayout from "./layout/GamesLayout";
 import QuizzesLayout from "./layout/QuizzesLayout";
 import DashboardLayout from "./layout/DashboardLayout";
-import NavBar from "./components/NavBar";
+
 
 const App = () => {
   return (
     <BrowserRouter>
-      <NavBar/>
       <Routes>
         <Route path="/" element={<HomeLayout />}/>
         <Route path="games" element={<GamesLayout/>}/>

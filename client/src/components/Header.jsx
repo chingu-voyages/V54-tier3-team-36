@@ -1,12 +1,17 @@
 import React from "react";
 import landingPage from "../assets/landingPage.png"
 
+
+
 const Header = () => {
   return (
-    <header className="w-full h-[70vh] bg-gray-800 text-white flex items-center justify-center">
-      <div className="w-full">
-        <h1 className="text-5xl text-center">Welcome to Animal World App</h1>
-        <img src={landingPage} alt="animals"/>
+    <header>
+      <div className="w-full flex flex-col items-center space-y-5 md:space-y-10">
+        <h1 className="text-5xl text-black text-center font-extrabold">Welcome to The <br/>Animal World App</h1>
+        <button className="w-40 hover:opacity-85">Get Started</button>
+        <div className="m-2 md:m-10 rounded-3xl overflow-hidden">
+          <img src={landingPage} alt="animals"/>
+        </div>
       </div>
     </header>
   );
