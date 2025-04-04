@@ -7,8 +7,8 @@ function FooterBottom() {
         <a
           href="https://github.com/chingu-voyages/V54-tier3-team-36"
           target="_blank"
-          className="text-lg text-gray-400 hover:text-emerald-400 dark:text-white dark:hover:text-emerald-400">
-          Github Project Link - February 2025
+          className="text-lg text-gray-400 hover:text-amber-300 dark:text-white dark:hover:text-emerald-400">
+          Github Project Link - April 2025
         </a>
       </div>
 
