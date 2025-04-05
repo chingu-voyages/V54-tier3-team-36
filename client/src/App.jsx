@@ -4,6 +4,7 @@ import HomeLayout from "./layout/HomeLayout";
 import GamesLayout from "./layout/GamesLayout";
 import QuizzesLayout from "./layout/QuizzesLayout";
 import DashboardLayout from "./layout/DashboardLayout";
+import Login from "./components/Login";
 
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="games" element={<GamesLayout/>}/>
         <Route path="quizzes" element={<QuizzesLayout/>} />
         <Route path="dashboard" element={<DashboardLayout/>}/>
+        <Route path="login" element={<Login/>}/>
       </Routes>
       
     </BrowserRouter>

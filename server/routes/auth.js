@@ -52,8 +52,10 @@ router.post("/login", async (req, res) => {
     
     // convert user input email to lower case
     const lowerEmail = email.toLowerCase()
+    console.log(lowerEmail)
 
     const user = await User.findOne({ lowerEmail });
+    console.log(user)
 
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
@@ -71,7 +73,6 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error"});
   }
 });
-
 
 
 /// IGNORE - NOT USED
