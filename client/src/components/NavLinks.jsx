@@ -26,7 +26,7 @@ const NavLinks = () => {
         Dashboard
       </NavLink>
         
-      <Link to="/login">
+      <Link to="/signup">
         <button className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white'>
           Signup
         </button>
