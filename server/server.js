@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from 'cors'
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js'
+import dashRoutes from './routes/dashboard.js'
 
 dotenv.config()
 
@@ -14,6 +15,7 @@ app.use(express.json()); // allows us to accept JSON data in the req.body
 app.use(cors());
 
 app.use("/api/auth", authRoutes)
+app.use("/api/dashboard", dashRoutes)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {

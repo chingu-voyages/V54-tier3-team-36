@@ -1,5 +1,6 @@
 import express from "express";
 import User from '../models/User.js'
+import Dashboard from "../models/Dashboard.js";
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'
 
@@ -19,7 +20,7 @@ router.post("/signup", async (req, res) => {
     const lowerEmail = email.toLowerCase()
 
     // Check if user already exists
-    const existingUser = await User.findOne( {email: lowerEmail});
+    const existingUser = await User.findOne({email: lowerEmail});
     if ( existingUser ) {
       return res.status(400).json({ success: false, message: "User already exists"});
     }
@@ -31,6 +32,10 @@ router.post("/signup", async (req, res) => {
     // Create new user
     const newUser = new User({ name, email: lowerEmail, password: hashedPassword, age });
     await newUser.save();
+
+    // Create dashboard for new user
+    const newDashboard = new Dashboard({user: newUser._id});
+    await newDashboard.save()
 
     res.status(201).json({ success: true, data: newUser });
 
