@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router';
 
 const Signup = () => {
   const [formData, setFormData ] = useState({
@@ -7,6 +8,8 @@ const Signup = () => {
     password: "",
     age: 0 //maybe will change to select/options
   });
+
+  const [message, setMessage ] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,9 +20,33 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Form submitted:', formData)
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const result = await response.json()
+
+      if (!result?.success) {
+        setMessage(result?.message)
+      } else {
+        console.log(result.data)
+        //redirect to home page and save user
+
+      }
+
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setMessage('Something went wrong during signup.')
+    }
   }
 
   return (
@@ -73,7 +100,11 @@ const Signup = () => {
 
         <button type='submit'>Submit</button>
       </form>
-        
+      {message && <p>{message}</p>}
+
+      <Link to="/login">
+      <button>Login</button>
+      </Link>
     </div>
   )
 }

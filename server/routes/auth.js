@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
     const lowerEmail = email.toLowerCase()
 
     // Check if user already exists
-    const existingUser = await User.findOne({ lowerEmail });
+    const existingUser = await User.findOne( {email: lowerEmail});
     if ( existingUser ) {
       return res.status(400).json({ success: false, message: "User already exists"});
     }
@@ -52,10 +52,7 @@ router.post("/login", async (req, res) => {
     
     // convert user input email to lower case
     const lowerEmail = email.toLowerCase()
-    console.log(lowerEmail)
-
-    const user = await User.findOne({ lowerEmail });
-    console.log(user)
+    const user = await User.findOne({ email: lowerEmail});
 
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
@@ -75,66 +72,66 @@ router.post("/login", async (req, res) => {
 });
 
 
-/// IGNORE - NOT USED
-router.get("/", async (req, res)=> {
-    try {
-        const users = await User.find({});
-        res.status(200).json({ success: true, data: users });
-    } catch (error) {
-        console.log("error in fetching users: ", error.message);
-        res.status(500).json({ success: false, message: "Server Error"})
-    }
-})
+/// IGNORE - NOT USED - example of CRUD
+// router.get("/", async (req, res)=> {
+//     try {
+//         const users = await User.find({});
+//         res.status(200).json({ success: true, data: users });
+//     } catch (error) {
+//         console.log("error in fetching users: ", error.message);
+//         res.status(500).json({ success: false, message: "Server Error"})
+//     }
+// })
 
-router.post("/", async (req, res) => {
-    const user = req.body; 
+// router.post("/", async (req, res) => {
+//     const user = req.body; 
     
-    if(!user.name || !user.email || !user.password || !user.age ) {
-        return res.status(400).json({ success:false, message: "Please provide all fields"})
-    }
+//     if(!user.name || !user.email || !user.password || !user.age ) {
+//         return res.status(400).json({ success:false, message: "Please provide all fields"})
+//     }
 
-    const newUser = new User(user)
+//     const newUser = new User(user)
 
-    try {
-        await newUser.save();
-        res.status(201).json({success:true, data: newUser});
-    } catch (error) {
-        console.error("Error in creating user:", error.message)
-        res.status(500).json({success: false, message: "Server Error"})
-    }
-});
+//     try {
+//         await newUser.save();
+//         res.status(201).json({success:true, data: newUser});
+//     } catch (error) {
+//         console.error("Error in creating user:", error.message)
+//         res.status(500).json({success: false, message: "Server Error"})
+//     }
+// });
 
-router.put("/:id", async (req, res) => {
-    const {id} = req.params;
+// router.put("/:id", async (req, res) => {
+//     const {id} = req.params;
 
-    const user = req.body;
+//     const user = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({success:false, message: "Invalid user id"})
-    }
+//     if (!mongoose.Types.ObjectId.isValid(id)) {
+//         return res.status(404).json({success:false, message: "Invalid user id"})
+//     }
 
-    try {
-        const updatedUser = await User.findByIdAndUpdate(id, user, {new:true});
-        res.status(200).json({ success:true, data: updatedUser })
-    } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"})
-    }
-})
+//     try {
+//         const updatedUser = await User.findByIdAndUpdate(id, user, {new:true});
+//         res.status(200).json({ success:true, data: updatedUser })
+//     } catch (error) {
+//         res.status(500).json({success: false, message: "Server Error"})
+//     }
+// })
 
 
-router.delete("/:id", async (req, res)=> {
-    const { id } = req.params;
+// router.delete("/:id", async (req, res)=> {
+//     const { id } = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({success:false, message: "Invalid user id"})
-    }
+//     if (!mongoose.Types.ObjectId.isValid(id)) {
+//         return res.status(404).json({success:false, message: "Invalid user id"})
+//     }
 
-    try {
-        await User.findByIdAndDelete(id);
-        res.status(200).json({ success:true, message: "User deleted" });
-    } catch (error) {
-        res.status(500).json({success: false, message: "Server Error"})
-    }
-})
+//     try {
+//         await User.findByIdAndDelete(id);
+//         res.status(200).json({ success:true, message: "User deleted" });
+//     } catch (error) {
+//         res.status(500).json({success: false, message: "Server Error"})
+//     }
+// })
 
 export default router
