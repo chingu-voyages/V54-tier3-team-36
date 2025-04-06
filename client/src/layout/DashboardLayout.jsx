@@ -5,7 +5,7 @@ import NavBar from '../components/NavBar'
 
 const DashboardLayout = () => {
   // this will be taken from sessions/tokens/context
-  const userId = "67f0e1a9f07eee61ed0622c5"
+  const userId = "67f20b50f453a24a59d35adf"
 
   useEffect(()=> {
     const fetchDashboard = async () => {
