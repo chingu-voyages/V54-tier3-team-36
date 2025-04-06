@@ -58,6 +58,12 @@ const Board = ({ imgUrl }) => {
     setCurrentImageIndex((prevIndex) => (prevIndex === 4 ? 0 : prevIndex + 1));
   };
 
+  const handleQuitGame = () => {
+    setIsStarted(false);
+    setNumOfMoves(0);
+    setTiles([...Array(TILE_COUNT).keys()]);
+  };
+
   const boardSize = isMobile ? SMALL_BOARD_SIZE : BOARD_SIZE
 
   const hasWon = isSolved(tiles);
@@ -107,15 +113,23 @@ const Board = ({ imgUrl }) => {
         ) : (
           <>
             <p className="mt-6">{numOfMoves} Moves Taken</p>
-            <button
-              className="text-white bg-amber-400 shadow-lg shadow-amber-500/50 border-none px-5 py-2 w-max self-center hover:bg-amber-300"
-              onClick={() => {
-                handleShuffleClick()
-                setNumOfMoves(0)
-              }}
-            >
-              Restart Game
-            </button>
+            <div className="flex gap-4 justify-center">
+              <button
+                className="text-white bg-amber-400 shadow-lg shadow-amber-500/50 border-none px-5 py-2 w-max self-center hover:bg-amber-300"
+                onClick={() => {
+                  handleShuffleClick()
+                  setNumOfMoves(0)
+                }}
+              >
+                Restart Game
+              </button>
+              <button
+                className="text-white bg-red-400 shadow-lg shadow-red-500/50 border-none px-5 py-2 w-max self-center hover:bg-red-300"
+                onClick={handleQuitGame}
+              >
+                Quit Game
+              </button>
+            </div>
           </>
         )}
       </div>
