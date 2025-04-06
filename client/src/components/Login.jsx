@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import NavBar from './NavBar'
-import background from "../assets/background.jpg"
 
 const Login = () => {
-  const pageBg = "bg-white bg-opacity-0"
+  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+  const localApiUrl = 'http://localhost:5000'
+
+  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+
   const [formData, setFormData ] = useState({
     email: "",
     password: "",
@@ -25,7 +27,7 @@ const Login = () => {
     console.log('Form submitted:', formData)
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch(`${backendUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -50,11 +52,7 @@ const Login = () => {
   }
   
   return (
-    <div className="md:min-h-screen flex items-center justify-center bg-contain md:bg-cover bg-center"
-      style={{ backgroundImage: `url(${background})`}}>
-      <div className="m-10 p-2 md:m-32 md:p-8 bg-white bg-opacity-75 rounded-[3vw] overflow-hidden">
-        <NavBar bgColor={pageBg}/>
-
+    <div className="w-full">
         <form onSubmit={handleSubmit}>
         <h2>Login</h2>
 
@@ -83,7 +81,6 @@ const Login = () => {
         <button type='submit'>Submit</button>
       </form>
       {message && <p>{message}</p>}
-      </div>
 
     </div>  
   )

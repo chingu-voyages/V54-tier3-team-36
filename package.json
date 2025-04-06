@@ -10,7 +10,8 @@
     "start": "node server/server.js",
     "server": "nodemon server/server.js",
     "client": "npm run dev --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "clean-ports": "lsof -ti:5173 -sTCP:LISTEN | xargs kill -9 && lsof -ti:5000 -sTCP:LISTEN | xargs kill -9"
   },
   "type": "module",
   "keywords": [],

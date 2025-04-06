@@ -4,13 +4,19 @@ import Component2 from '../components/Component2'
 import NavBar from '../components/NavBar'
 
 const DashboardLayout = () => {
+  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+  const localApiUrl = 'http://localhost:5000'
+
+  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+
   // this will be taken from sessions/tokens/context
   const userId = "67f20b50f453a24a59d35adf"
 
   useEffect(()=> {
     const fetchDashboard = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/dashboard/${userId}`)
+        console.log("Fetching dashboard...")
+        const response = await fetch(`${backendUrl}/api/dashboard/${userId}`)
         const result = await response.json()
         console.log(result)
 
