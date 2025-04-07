@@ -5,7 +5,7 @@ import { useAuth } from "../context/auth";
 
 
 const Header = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
     <>

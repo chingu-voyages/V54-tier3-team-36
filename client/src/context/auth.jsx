@@ -13,7 +13,6 @@ const AuthProvider = ({ children }) => {
 	// Check token on load
 	useEffect(() => {
 		const token = sessionStorage.getItem('token');
-		console.log("token stored in sessionstorage", token)
 		const verifyToken = async() => {
 			try {
 				const response = await fetch(`${backendUrl}/api/auth/verifytoken`, {

@@ -58,36 +58,41 @@ const Login = () => {
   }
   
   return (
-    <div className="w-full">
-        <form onSubmit={handleSubmit}>
-        <h2>Login</h2>
-
-        <label>
-          <strong>Email: </strong>
+    <div className='w-[95%] h-[70vh] bg-emerald-900 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
+      <form className="flex flex-col py-5 items-center" onSubmit={handleSubmit}>
+        <h2 className='text-3xl md:text-5xl font-bold'>Animal World</h2>
+        <h2 className='italic md:text-xl'>~Let's get back to the fun!~</h2>
+        <div className='flex flex-col w-full md:w-[50%] py-6'>
+          <label htmlFor="email" className='mt-2'>
+            <strong>Email</strong>
+          </label>
           <input
             type="email"
             name="email"
+            id="email"
+            placeholder='Email'
             value={formData.email}
             onChange={handleChange}
-            className='text-black'
+            className='text-black pl-2 md:pl-6'
           />
-        </label>
 
-        <label>
-          <strong>Password: </strong>
+          <label htmlFor='password' className='mt-2'>
+            <strong>Password: </strong>
+          </label>
           <input
             type="password"
+            id='password'
             name="password"
+            placeholder='*******'
             value={formData.password}
             onChange={handleChange}
-            className='text-black'
+            className='text-black pl-2 md:pl-6'
           />
-        </label>
 
-        <button type='submit'>Submit</button>
+        </div>
+        <button className="bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white" type='submit'>Log In</button>
+        {message && <p>{message}</p>}
       </form>
-      {message && <p>{message}</p>}
-
     </div>  
   )
 }
