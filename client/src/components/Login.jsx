@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import { useAuth } from '../context/auth'
 
 const Login = () => {
   const apiUrl = 'https://v54-tier3-team-36.onrender.com'
   const localApiUrl = 'http://localhost:5000'
 
   const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+
+  const { login } = useAuth();
 
   const [formData, setFormData ] = useState({
     email: "",
@@ -40,7 +43,10 @@ const Login = () => {
       if (!result?.success) {
         setMessage(result?.message)
       } else {
-        console.log(result.data)
+        console.log("LOGIN SUCCESSFULLY")
+        const token = result.token
+        sessionStorage.setItem('token', token);
+        login(token)
         //redirect to home page and save user
 
       }

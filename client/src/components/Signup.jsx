@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router';
+import { useAuth } from '../context/auth';
 
 const Signup = () => {
 
@@ -7,6 +8,8 @@ const Signup = () => {
   const localApiUrl = 'http://localhost:5000'
 
   const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+
+  const { login } = useAuth();
 
   const [formData, setFormData ] = useState({
     name: "",
@@ -44,9 +47,12 @@ const Signup = () => {
       if (!result?.success) {
         setMessage(result?.message)
       } else {
-        console.log(result.data)
-        //redirect to home page and save user
-
+        console.log(result)
+        console.log("SIGNUP SUCCESSFULLY")
+        const token = result.token
+        sessionStorage.setItem('token', token);
+        login(token)
+        //redirect to home page
       }
 
     } catch (error) {

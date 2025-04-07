@@ -1,10 +1,23 @@
 import express from "express";
 import User from '../models/User.js'
 import Dashboard from "../models/Dashboard.js";
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 const router = express.Router();
+
+router.get('/verifytoken', (req,res) => {
+  const auth = req.headers.authorization;
+  if (!auth)
+    return res.status(401).json({success:false, message: "Unauthorized"})
+  const token = auth.split(' ')[1];
+  try {
+    const user = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+    res.status(200).json({ success: true, user: user.user})
+  } catch (error) {
+    return res.status(401).json({success:false, message: "Unauthorized"})
+  }
+})
 
 router.post("/signup", async (req, res) => {
   try {
@@ -36,7 +49,9 @@ router.post("/signup", async (req, res) => {
     const newDashboard = new Dashboard({user: newUser._id});
     await newDashboard.save()
 
-    res.status(201).json({ success: true, data: newUser });
+    // Only sent the token back in response. will validate the token to retrieve user data
+    const token = jwt.sign({user: newUser}, process.env.JWT_TOKEN_SECRET );
+    res.status(201).json({ success: true, token: token });
 
   } catch (error) {
     console.log("Error in creating user", error.message)
@@ -67,7 +82,10 @@ router.post("/login", async (req, res) => {
     if (!isPasswordValid) {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
-    res.status(200).json({success: true, data: user})
+    
+    // Only sent the token back in response. will validate the token to retrieve user data
+    const token = jwt.sign({user: user}, process.env.JWT_TOKEN_SECRET );
+    res.status(200).json({success: true, token: token})
 
   } catch (error) {
     console.log("Error in login", error.message)
