@@ -1,0 +1,32 @@
+{
+  "name": "v54-tier3-team-36",
+  "version": "1.0.0",
+  "description": "Your project's `readme` is as important to success as your code. For this reason you should put as much care into its creation and maintenance as you would any other component of the application.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "clean-ports": "lsof -ti:5173 -sTCP:LISTEN | xargs kill -9 && lsof -ti:5000 -sTCP:LISTEN | xargs kill -9"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "concurrently": "^9.1.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
