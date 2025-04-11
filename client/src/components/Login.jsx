@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../context/auth'
+import { useNavigate } from 'react-router'
+
 
 const Login = () => {
   const apiUrl = 'https://v54-tier3-team-36.onrender.com'
@@ -7,6 +9,7 @@ const Login = () => {
 
   const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
 
+  const navigate = useNavigate()
   const { login } = useAuth();
 
   const [formData, setFormData ] = useState({
@@ -47,7 +50,7 @@ const Login = () => {
         const token = result.token
         sessionStorage.setItem('token', token);
         login(token)
-        //redirect to home page and save user
+        navigate("/")
 
       }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../context/auth';
 
 const Signup = () => {
@@ -10,6 +10,8 @@ const Signup = () => {
   const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
 
   const { login } = useAuth();
+
+  const navigate = useNavigate();
 
   const [formData, setFormData ] = useState({
     name: "",
@@ -52,7 +54,7 @@ const Signup = () => {
         const token = result.token
         sessionStorage.setItem('token', token);
         login(token)
-        //redirect to home page
+        navigate("/")
       }
 
     } catch (error) {
