@@ -15,25 +15,26 @@ const DashboardLayout = () => {
   const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
 
   const { user } = useAuth();
-  const { dashboardInfo, setDashboardInfo } = useState()
-  console.log(user)
+  const [ dashboardInfo, setDashboardInfo ] = useState({})
 
   useEffect(()=> {
-    const fetchDashboard = async () => {
-      try {
-        console.log("Fetching dashboard...")
-        const response = await fetch(`${backendUrl}/api/dashboard/${user._id}`)
-        const result = await response.json()
-        console.log("dashboard info", result)
-        setDashboardInfo(result)
-      } catch (error) {
-        console.error("Error fetching dashboard", error)
-      }
-    }
     if (user) {
+      const fetchDashboard = async () => {
+        try {
+          console.log("Fetching dashboard...")
+          const response = await fetch(`${backendUrl}/api/dashboard/${user._id}`)
+          const result = await response.json()
+          setDashboardInfo(result.data)
+        } catch (error) {
+          console.error("Error fetching dashboard", error)
+        }
+      }
       fetchDashboard();
     }
-  }, [])
+  }, [user])
+
+  console.log("Dashboard info in state")
+  console.log(dashboardInfo)
 
   return (
     <div className="md:min-h-screen flex items-center justify-center bg-fixed bg-no-repeat bg-center bg-cover"

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../context/auth';
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
 
 const Signup = () => {
 
