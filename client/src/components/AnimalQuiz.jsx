@@ -108,7 +108,7 @@ const AnimalQuiz = () => {
             <button
               key={index}
               onClick={() => handleAnswer(option, currentQuestion.answer)}
-              className={`block w-2/3 py-2 px-4 rounded mb-2 ${
+              className={`block w-2/3 py-2 px-4 rounded mb-2 border-none ${
                 showAnswer
                   ? option === currentQuestion.answer
                     ? "bg-green-400 text-white"
