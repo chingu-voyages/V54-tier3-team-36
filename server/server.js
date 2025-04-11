@@ -6,8 +6,6 @@ import authRoutes from './routes/auth.js'
 import dashRoutes from './routes/dashboard.js'
 
 dotenv.config()
-console.log('Loaded env:', process.env.JWT_TOKEN_SECRET);
-
 
 const app = express();
 
