@@ -1,0 +1,182 @@
+[
+  {
+    "level": 1,
+    "questions": [
+      {
+        "question": "Which animal says 'woof'?",
+        "options": ["Dog", "Cat", "Fish", "Bird"],
+        "answer": "Dog"
+      },
+      {
+        "question": "Which pet purrs when it's happy?",
+        "options": ["Cat", "Dog", "Hamster", "Frog"],
+        "answer": "Cat"
+      },
+      {
+        "question": "Which pet has fins and swims?",
+        "options": ["Bird", "Rabbit", "Fish", "Dog"],
+        "answer": "Fish"
+      },
+      {
+        "question": "Which pet can fly?",
+        "options": ["Fish", "Parrot", "Hamster", "Turtle"],
+        "answer": "Parrot"
+      },
+      {
+        "question": "What do rabbits like to eat?",
+        "options": ["Carrots", "Ice cream", "Cake", "Cheese"],
+        "answer": "Carrots"
+      }
+    ]
+  },
+  {
+    "level": 2,
+    "questions": [
+      {
+        "question": "What do dogs use to smell things?",
+        "options": ["Tail", "Nose", "Ears", "Eyes"],
+        "answer": "Nose"
+      },
+      {
+        "question": "What do hamsters love to run on?",
+        "options": ["Treadmill", "Wheel", "Carpet", "Fence"],
+        "answer": "Wheel"
+      },
+      {
+        "question": "What do fish breathe with?",
+        "options": ["Mouth", "Fins", "Gills", "Lungs"],
+        "answer": "Gills"
+      },
+      {
+        "question": "Which pet might talk like a person?",
+        "options": ["Parrot", "Cat", "Lizard", "Fish"],
+        "answer": "Parrot"
+      },
+      {
+        "question": "What sound does a cat make?",
+        "options": ["Woof", "Meow", "Neigh", "Oink"],
+        "answer": "Meow"
+      }
+    ]
+  },
+  {
+    "level": 3,
+    "questions": [
+      {
+        "question": "Why should you walk your dog every day?",
+        "options": [
+          "To watch TV",
+          "To give exercise and fresh air",
+          "To scare cats",
+          "So it eats more"
+        ],
+        "answer": "To give exercise and fresh air"
+      },
+      {
+        "question": "What should you feed guinea pigs?",
+        "options": ["Cookies", "Meat", "Hay and Vegetables", "Pizza"],
+        "answer": "Hay and Vegetables"
+      },
+      {
+        "question": "Why do cats have whiskers?",
+        "options": [
+          "To hear better",
+          "To help them feel space",
+          "To smell food",
+          "To jump higher"
+        ],
+        "answer": "To help them feel space"
+      },
+      {
+        "question": "Which pet enjoys dust baths to stay clean?",
+        "options": ["Chinchilla", "Rabbit", "Fish", "Dog"],
+        "answer": "Chinchilla"
+      },
+      {
+        "question": "What is the job of a vet?",
+        "options": ["Train pets", "Feed animals", "Take care of sick pets", "Make pet toys"],
+        "answer": "Take care of sick pets"
+      }
+    ]
+  },
+  {
+    "level": 4,
+    "questions": [
+      {
+        "question": "What should you do before petting a new dog?",
+        "options": [
+          "Run to hug it",
+          "Pull its tail",
+          "Ask the owner and go slow",
+          "Shout its name"
+        ],
+        "answer": "Ask the owner and go slow"
+      },
+      {
+        "question": "Why should you not tap on a fish tank?",
+        "options": [
+          "It can scare or stress the fish",
+          "It breaks the tank",
+          "Fish don’t like water",
+          "They might jump out"
+        ],
+        "answer": "It can scare or stress the fish"
+      },
+      {
+        "question": "How often should you clean a hamster’s cage?",
+        "options": ["Every week", "Every year", "Never", "Once a month"],
+        "answer": "Every week"
+      },
+      {
+        "question": "Why do dogs wag their tails?",
+        "options": ["To dig holes", "To balance", "To show feelings", "To bark louder"],
+        "answer": "To show feelings"
+      },
+      {
+        "question": "Which pet might live in a warm tank and eat crickets?",
+        "options": ["Lizard", "Bird", "Dog", "Cat"],
+        "answer": "Lizard"
+      }
+    ]
+  },
+  {
+    "level": 5,
+    "questions": [
+      {
+        "question": "What’s the first thing to do before getting a pet?",
+        "options": [
+          "Pick a name",
+          "Buy toys",
+          "Learn how to care for it",
+          "Choose its color"
+        ],
+        "answer": "Learn how to care for it"
+      },
+      {
+        "question": "Which of these animals is cold-blooded?",
+        "options": ["Dog", "Snake", "Rabbit", "Parrot"],
+        "answer": "Snake"
+      },
+      {
+        "question": "What do you call a group of fish?",
+        "options": ["Herd", "Pack", "Flock", "School"],
+        "answer": "School"
+      },
+      {
+        "question": "Why do turtles need a heat lamp?",
+        "options": [
+          "To swim faster",
+          "To stay warm and healthy",
+          "To eat more",
+          "To grow new shells"
+        ],
+        "answer": "To stay warm and healthy"
+      },
+      {
+        "question": "Which pet is most likely to enjoy climbing?",
+        "options": ["Frog", "Hamster", "Fish", "Parrot"],
+        "answer": "Parrot"
+      }
+    ]
+  }
+]
