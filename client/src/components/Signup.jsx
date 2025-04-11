@@ -120,12 +120,12 @@ const Signup = () => {
           />
         </div>
 
-        <button className="bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white" type='submit'>Sign up</button>
+        <button className="bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none" type='submit'>Sign up</button>
         {message && <p>{message}</p>}
 
         <p className=''>Already signed up?  
           <Link to="/login"> 
-            <button className='bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white ml-2'>Login</button>
+            <button className='bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white ml-2 border-none'>Login</button>
           </Link>
         </p>
       </form>

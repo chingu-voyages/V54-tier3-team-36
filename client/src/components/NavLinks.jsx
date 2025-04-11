@@ -30,13 +30,13 @@ const NavLinks = () => {
       
       {user ? 
         <button 
-          className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white'
+          className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none'
           onClick={logout}
         >
           Logout
         </button> : 
         <Link to="/signup">
-          <button className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white'>
+          <button className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none'>
             Signup
           </button>
         </Link>

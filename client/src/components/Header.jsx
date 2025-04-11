@@ -16,7 +16,7 @@ const Header = () => {
         { user ? 
           <div><p className="text-xl text-black">Welcome back {user.name}!</p></div> :
           <Link to="/signup">
-            <button className="w-40 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white">
+            <button className="w-40 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none">
               Get Started
             </button>
           </Link> 
