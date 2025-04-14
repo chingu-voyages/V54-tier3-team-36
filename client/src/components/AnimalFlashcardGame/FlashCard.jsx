@@ -1,33 +1,41 @@
-import { useState } from "react";
 import Tilt from "react-parallax-tilt";
 import ReactCardFlip from "react-card-flip";
 import AnimalWorld from "../../assets/AnimalWorld.png";
 
-export default function FlashCard({ image }) {
-  const [isFlipped, setIsFlipped] = useState(false);
+export default function FlashCard({
+  id,
+  image,
+  animalName,
+  isFlipped,
+  onClick,
+  isMatched,
+}) {
+  // Don't render matched cards at all
+  if (isMatched) return null;
+
   return (
     <Tilt>
       <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
         <div
           key="front"
-          onClick={() => setIsFlipped(true)}
-          className="rounded-md overflow-hidden w-48 sm:w-56 md:w-60 aspect-[2/3] shadow-md flex items-center justify-center"
+          onClick={() => onClick(id)}
+          className="rounded-md overflow-hidden w-40 sm:w-48 md:w-52 aspect-[2/3] shadow-md flex items-center justify-center cursor-pointer bg-white hover:shadow-lg transition-shadow"
         >
           <img
-            className="align-middle size-52"
+            className="size-32 sm:size-40 md:size-44"
             src={AnimalWorld}
-            alt="App Logo"
+            alt="Card back"
           />
         </div>
         <div
           key="back"
-          onClick={() => setIsFlipped(false)}
-          className="rounded-md overflow-hidden w-48 sm:w-56 md:w-60 aspect-[2/3]"
+          onClick={() => onClick(id)}
+          className="rounded-md overflow-hidden w-40 sm:w-48 md:w-52 aspect-[2/3] cursor-pointer bg-white"
         >
           <img
             className="object-cover w-full h-full"
             src={image}
-            alt="Animal image"
+            alt={`${animalName}`}
           />
         </div>
       </ReactCardFlip>

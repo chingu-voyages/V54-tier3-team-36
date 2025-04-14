@@ -11,12 +11,15 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",
+    "lucide-react": "^0.488.0",
     "prop-types": "^15.8.1",
     "react": "18.2",
     "react-card-flip": "^1.2.3",
+    "react-confetti": "^6.4.0",
     "react-dom": "18.2",
     "react-parallax-tilt": "^1.7.289",
-    "react-router": "^7.4.0"
+    "react-router": "^7.4.0",
+    "react-use": "^17.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
