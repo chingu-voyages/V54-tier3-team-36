@@ -1,8 +1,8 @@
-import farmAnimals from "../../assets/farmAnimals.png";
-import LionPhoto from "../../assets/LionPhoto.png";
-import MultipleAnimals from "../../assets/MultipleAnimals.png";
-import safariFun from "../../assets/safariFun.png";
-import safariLand from "../../assets/safariLand.png";
+import farmAnimals from "../../assets/images/footer-images/farmAnimals.png";
+import LionPhoto from "../../assets/images/guess-animal-sounds/LionPhoto.png";
+import MultipleAnimals from "../../assets/images/footer-images/MultipleAnimals.png";
+import safariFun from "../../assets/images/footer-images/safariFun.png";
+import safariLand from "../../assets/images/footer-images/safariLand.png";
 
 function FooterLogos() {
   return (
