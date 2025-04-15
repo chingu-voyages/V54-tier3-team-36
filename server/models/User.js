@@ -13,10 +13,15 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: [4, 'Password must be at least 4 characters'],
     },
     age: {
-        type: Number,
+        type: String,
+        enum: {
+            values:['<5', '5-8', '9-12', '13-17','18+'],
+            message: '{VALUE} is not a valid age group',
+        },
         required: true
     },
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../context/auth';
+import { useForm } from 'react-hook-form';
 
 const Signup = () => {
 
@@ -11,27 +12,38 @@ const Signup = () => {
 
   const { login } = useAuth();
 
-  const [formData, setFormData ] = useState({
-    name: "",
-    email: "",
-    password: "",
-    age: 0 //maybe will change to select/options
-  });
+  const navigate = useNavigate();
+
+  const { 
+    register, 
+    handleSubmit, 
+    watch, 
+    formState: {errors}, 
+  } = useForm();
+
+
+  // const [formData, setFormData ] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   age: 0 //maybe will change to select/options
+  // });
 
   const [message, setMessage ] = useState('')
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value
+  //   }));
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData)
+  const age = watch('age') // watch the age selection
+   
+  const onSubmit = async (data) => {
+    console.log('Form submitted:', data)
 
     try {
       const response = await fetch(`${backendUrl}/api/auth/signup`, {
@@ -39,7 +51,7 @@ const Signup = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(data)
       });
       
       const result = await response.json()
@@ -52,7 +64,7 @@ const Signup = () => {
         const token = result.token
         sessionStorage.setItem('token', token);
         login(token)
-        //redirect to home page
+        navigate("/")
       }
 
     } catch (error) {
@@ -62,8 +74,8 @@ const Signup = () => {
   }
 
   return (
-    <div className='w-[95%] h-[70vh] bg-emerald-900 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
-      <form className="flex flex-col py-5 items-center" onSubmit={handleSubmit}>
+    <div className='w-[95%] h-[70vh] bg-emerald-700 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
+      <form className="flex flex-col py-5 items-center" onSubmit={handleSubmit(onSubmit)}>
         <h2 className='text-3xl md:text-5xl font-bold'>Animal World</h2>
         <h2 className='italic md:text-xl'>~Ready for some fun!~</h2>
         
@@ -75,11 +87,13 @@ const Signup = () => {
             type="text"
             id='name'
             name="name"
-            value={formData.name}
-            onChange={handleChange}
+            // value={formData.name}
+            // onChange={handleChange}
+            {...register("name", { required: "Name is required" })}
             placeholder='What should we call you?'
-            className='text-black pl-2 md:pl-6'
+            className='text-black pl-2 md:pl-3'
           />
+          {errors.name && <p className="text-red-700 font-bold text-md">{errors.name.message}</p>}
 
           <label htmlFor="email" className='mt-2'>
             <strong>Email</strong>
@@ -89,10 +103,18 @@ const Signup = () => {
             name="email"
             id="email"
             placeholder='How we will contact you'
-            value={formData.email}
-            onChange={handleChange}
-            className='text-black pl-2 md:pl-6'
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: "Invalid email format",
+              },
+            })}
+            // value={formData.email}
+            // onChange={handleChange}
+            className='text-black pl-2 md:pl-3'
           />
+           {errors.email && <p className="text-red-700 font-bold text-md">{errors.email.message}</p>}
 
           <label htmlFor='password' className='mt-2'>
             <strong>Password: </strong>
@@ -102,25 +124,69 @@ const Signup = () => {
             id='password'
             name="password"
             placeholder='Keep it a secret!'
-            value={formData.password}
-            onChange={handleChange}
-            className='text-black pl-2 md:pl-6'
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 4,
+                message: "Must be at least 4 characters",
+              },
+            })}
+            // value={formData.password}
+            // onChange={handleChange}
+            className='text-black pl-2 md:pl-3'
           />
+          {errors.password && <p className="text-red-700 font-bold text-md">{errors.password.message}</p>}
 
           <label htmlFor='age' className='mt-2'>
             <strong>Age: </strong>
           </label>
-          <input
+          {/* <input
             type="number"
             id="age"
             name="age"
             value={formData.age}
             onChange={handleChange}
             className='text-black pl-2 md:pl-6'
-          />
+          /> */}
+          <select
+            name='age'
+            className='text-black pl-2 md:pl-3'
+            {...register("age", { required: "Please select your age" })}
+          >
+            <option value="">-- Select your age --</option>
+            <option value="<5">Less than 5 years old</option>
+            <option value="5-8">5-8 years old</option>
+            <option value="9-12">9-12 years old</option>
+            <option value="13-17">13-17 years old</option>
+            <option value="18+">18 years or older</option>
+          </select>
+          {errors.age && <p className="text-red-700 font-bold text-md">{errors.age.message}</p>}
         </div>
 
-        <button className="bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none" type='submit'>Sign up</button>
+        {age !== "18+" && age !== "" && (
+          <>
+          <div className='flex items-center space-x-2'>
+            <input
+              type="checkbox"
+              className='h-5 w-5'
+              {...register("consent", {
+                validate: (value) => {
+                  if (age !== "18+" && age !== "") {
+                  return value === true || "Parent/Guardian consent is required.";
+                }
+                return true;
+                },
+              })}
+            />
+            <label className="text-lg font-semibold">
+            I have permission from a parent or guardian.
+            </label>
+          </div>
+          {errors.consent && <p className="text-red-700 font-bold text-md">{errors.consent.message}</p>}
+          </>
+        )}
+
+        <button className="mt-2 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none" type='submit'>Sign up</button>
         {message && <p>{message}</p>}
 
         <p className=''>Already signed up?  
