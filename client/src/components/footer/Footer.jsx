@@ -1,18 +1,15 @@
 import FooterContent from "./FooterContent";
 import FooterBottom from "./FooterBottom";
-import animalBackgroundPhoto from "../../assets/images/footer-images/animalBackgroundPhoto.png";
 import FooterWaves from "./FooterWaves";
 
 function Footer() {
   return (
     <footer
       id="footer"
-      className="w-full relative text-emerald-400 dark:bg-gray-900 dark:text-white overflow-hidden"
+      className="w-[95%] h-auto px-12 mb-10 mx-auto relative text-emerald-400 dark:bg-gray-900 dark:text-white overflow-hidden mt-8"
       style={{
         backgroundColor: "#006666",
-        borderRadius: "0.9rem",
-        border: "50px solid transparent",
-        borderImage: `url(${animalBackgroundPhoto}) 30 round`
+        borderRadius: "1.8rem"
       }}>
       <FooterWaves />
       <div className="max-w-7xl mx-auto col-span-12 pt-10 relative z-10">
