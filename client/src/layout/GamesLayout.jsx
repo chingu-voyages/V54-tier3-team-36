@@ -1,8 +1,11 @@
+import React from "react";
+import FlashCardGame from "../components/AnimalFlashcardGame/FlashCardGame";
 import NavBar from '../components/NavBar'
 import Footer from '../components/footer/Footer'
 import Component2 from '../components/Component2'
 import SlidingPuzzle from '../components/SlidingAnimalPuzzle/SlidingPuzzle'
 import backgroundImage from "../assets/backgroundImage.jpg"
+
 
 const GamesLayout = () => {
   const pageBg = "bg-white bg-opacity-0"
@@ -17,6 +20,9 @@ const GamesLayout = () => {
             <SlidingPuzzle />
           </div>
           <div className="flex justify-center w-full">
+             <FlashCardGame />
+           </div>
+          <div className="flex justify-center w-full">
             <Component2 />
           </div>
         </div>
@@ -26,4 +32,4 @@ const GamesLayout = () => {
   )
 }
 
-export default GamesLayout
+export default GamesLayout;
