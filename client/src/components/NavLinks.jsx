@@ -1,7 +1,9 @@
 import React from 'react'
-import { NavLink } from "react-router";
+import { NavLink, Link } from "react-router";
+import { useAuth } from '../context/auth';
 
 const NavLinks = () => {
+  const { user, logout } = useAuth();
 
   const linkStyle = ({ isActive }) =>
     `md:text-xl ${
@@ -25,11 +27,20 @@ const NavLinks = () => {
       <NavLink to="/dashboard" className={linkStyle}> 
         Dashboard
       </NavLink>
-        
-      <button>
-        Signup
-      </button>
-    
+      
+      {user ? 
+        <button 
+          className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none'
+          onClick={logout}
+        >
+          Logout
+        </button> : 
+        <Link to="/signup">
+          <button className='w-32 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none'>
+            Signup
+          </button>
+        </Link>
+      }
     </>
   )
 }
