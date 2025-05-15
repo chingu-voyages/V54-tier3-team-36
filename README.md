@@ -40,3 +40,4 @@ coding!
 - Jorge Alvarado: [GitHub](https://github.com/alvarado08) / [LinkedIn](https://linkedin.com/in/jorgep-alvarado)
 - Rika Miyata: [GitHub](https://github.com/Tayrika) / [LinkedIn](https://www.linkedin.com/in/rika-miyata-4bab99243/)
 - Aigul Yermagambetova: [GitHub](https://github.com/aigul-ermak) / [LinkedIn](https://www.linkedin.com/in/aigul-ermak/)
+- Ruqaiya Electricwala: [GitHub](https://github.com/ruqaiyae) / [LinkedIn](https://www.linkedin.com/in/ruqaiya-electricwala/)
