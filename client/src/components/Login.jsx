@@ -1,125 +1,122 @@
-import React, { useState } from 'react'
-import { useAuth } from '../context/auth'
-import { useNavigate } from 'react-router'
-import { useForm } from 'react-hook-form';
+import React from 'react'
+import {useAuth} from '../context/auth'
+import {useNavigate} from 'react-router'
+import {useForm} from 'react-hook-form';
+import {zodResolver} from "@hookform/resolvers/zod";
+import {loginSchema} from "../schemas/auth.schema";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {Button} from "@/components/ui/button";
+import {Input} from "@/components/ui/input";
+import {useToast} from "@/hooks/use-toast.js";
 
 
 const Login = () => {
-  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
-  const localApiUrl = 'http://localhost:5000'
+    const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+    const localApiUrl = 'http://localhost:5000'
 
-  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+    const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl : localApiUrl
 
-  const navigate = useNavigate()
-  const { login } = useAuth();
+    const navigate = useNavigate()
+    const {login} = useAuth();
+    const {toast} = useToast();
 
-  // const [formData, setFormData ] = useState({
-  //   email: "",
-  //   password: "",
-  // });
+    const form = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {email: "", password: ""},
+    });
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: {errors}, 
-  } = useForm();
+    const onSubmit = async (data) => {
+        console.log('Form submitted:', data)
 
-  const [message, setMessage ] = useState('')
+        try {
+            const response = await fetch(`${backendUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
+            const result = await response.json()
 
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value
-  //   }));
-  // };  
+            if (!result?.success) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Login Failed',
+                    description: result.message,
+                });
+            } else {
+                console.log("LOGIN SUCCESSFULLY")
+                const token = result.token
+                sessionStorage.setItem('token', token);
+                login(token)
+                toast({
+                    title: 'Logged In',
+                    description: 'Welcome back!'
+                });
+                navigate("/")
+            }
 
-  const onSubmit = async (data) => {
-    console.log('Form submitted:', data)
-
-    try {
-      const response = await fetch(`${backendUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      
-      const result = await response.json()
-
-      if (!result?.success) {
-        setMessage(result?.message)
-      } else {
-        console.log("LOGIN SUCCESSFULLY")
-        const token = result.token
-        sessionStorage.setItem('token', token);
-        login(token)
-        navigate("/")
-
-      }
-
-    } catch (error) {
-      console.error('Error during login:', error);
-      setMessage('Something went wrong during login.')
+        } catch (error) {
+            console.error('Error during login:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Something went wrong during login.',
+            });
+        }
     }
-  }
-  
-  return (
-    <div className='w-[95%] h-[70vh] bg-emerald-700 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
-      <form className="flex flex-col py-5 items-center" onSubmit={handleSubmit(onSubmit)}>
-        <h2 className='text-3xl md:text-5xl font-bold'>Animal World</h2>
-        <h2 className='italic md:text-xl'>~Let's get back to the fun!~</h2>
-        <div className='flex flex-col w-full md:w-[50%] py-6'>
-          <label htmlFor="email" className='mt-2'>
-            <strong>Email</strong>
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder='Email'
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: "Invalid email format",
-              },
-            })}
-            // value={formData.email}
-            // onChange={handleChange}
-            className='text-black pl-2 md:pl-3'
-          />
-          {errors.email && <p className="text-red-700 font-bold text-md">{errors.email.message}</p>}
 
-          <label htmlFor='password' className='mt-2'>
-            <strong>Password: </strong>
-          </label>
-          <input
-            type="password"
-            id='password'
-            name="password"
-            placeholder='*******'
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 4,
-                message: "Must be at least 4 characters",
-              },
-            })}
-            // value={formData.password}
-            // onChange={handleChange}
-            className='text-black pl-2 md:pl-3'
-          />
-          {errors.password && <p className="text-red-700 font-bold text-md">{errors.password.message}</p>}
-
+    return (
+        <div
+            className='w-[95%] h-[70vh] bg-emerald-700 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
+            <div className="flex justify-center items-center mt-8 md:mt-12 px-4 sm:px-6 lg:px-0">
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}
+                          className="w-full max-w-md space-y-6 bg-emerald-700 bg-opacity-75 p-8 rounded-2xl">
+                        <h2 className="text-3xl font-bold text-center">Animal World</h2>
+                        <p className="text-center italic">~Let's get back to the fun!~</p>
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="email"
+                                            placeholder="email@example.com"
+                                            {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            type="password"
+                                            placeholder="********"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="submit"
+                                className="w-3/4 mx-auto block bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white ml-2 border-none">Log
+                            In</Button>
+                    </form>
+                </Form>
+            </div>
         </div>
-        <button className="bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white" type='submit'>Log In</button>
-        {message && <p>{message}</p>}
-      </form>
-    </div>  
-  )
+    )
 }
 
 export default Login
