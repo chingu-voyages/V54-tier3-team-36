@@ -1,7 +1,7 @@
 import React from 'react';
 import hangmanBg from '../../../assets/guessGame/bg.png';
 
-const GuessGameCard = ({ children }) => {
+const GameContainer = ({ children }) => {
     return (
         <div
             className="
@@ -31,4 +31,4 @@ const GuessGameCard = ({ children }) => {
     );
 };
 
-export default GuessGameCard;
+export default GameContainer;
