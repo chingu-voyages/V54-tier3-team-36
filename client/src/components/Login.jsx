@@ -90,7 +90,7 @@ const Login = () => {
                                                 {...field} />
                                         </FormControl>
                                         <Mail
-                                            size={20}
+                                            size={18}
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
@@ -113,7 +113,7 @@ const Login = () => {
                                             />
                                         </FormControl>
                                         <Lock
-                                            size={20}
+                                            size={18}
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
@@ -132,7 +132,7 @@ const Login = () => {
                                     e.preventDefault()
                                     navigate('/signup')
                                 }}
-                                className="text-white underline hover:opacity-80 transition"
+                                className="text-white underline hover:text-teal-800 transition"
                             >
                                 Register
                             </a>
