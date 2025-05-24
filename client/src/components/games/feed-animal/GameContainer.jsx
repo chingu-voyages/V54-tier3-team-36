@@ -1,5 +1,5 @@
 import React from 'react';
-import hangmanBg from '../../../assets/guessGame/bg.png';
+
 
 const GameContainer = ({ children }) => {
     return (
@@ -20,9 +20,6 @@ const GameContainer = ({ children }) => {
                 bg-cover
                 bg-center
             "
-            style={{
-                backgroundImage: `url(${hangmanBg})`,
-            }}
         >
             <div className="w-full h-full flex flex-col items-center justify-center rounded-3xl p-8">
                 {children}
