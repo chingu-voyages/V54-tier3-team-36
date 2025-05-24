@@ -33,5 +33,40 @@
       "name": "Berries",
       "image": "food4.png"
     }
+  ],
+  "animals": [
+    {
+      "id": 101,
+      "name": "Rabbit",
+      "image": "food.png",
+      "wantedFoodIds": [
+        1
+      ]
+    },
+    {
+      "id": 102,
+      "name": "Cat",
+      "image": "food1.png",
+      "wantedFoodIds": [
+        2
+      ]
+    },
+    {
+      "id": 103,
+      "name": "Bear",
+      "image": "food2.png",
+      "wantedFoodIds": [
+        2,
+        4
+      ]
+    },
+    {
+      "id": 104,
+      "name": "Mouse",
+      "image": "food3.png",
+      "wantedFoodIds": [
+        3
+      ]
+    }
   ]
 }
