@@ -1,125 +1,147 @@
-import React, { useState } from 'react'
-import { useAuth } from '../context/auth'
-import { useNavigate } from 'react-router'
-import { useForm } from 'react-hook-form';
+import React from 'react';
+import {useNavigate} from 'react-router';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Lock, Mail} from 'lucide-react';
+import {loginSchema} from "../schemas/auth.schema";
+import {useAuth} from '../context/auth';
+import {useToast} from "@/hooks/use-toast.js";
+import {Form, FormControl, FormField, FormItem, FormMessage,} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
 
 
 const Login = () => {
-  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
-  const localApiUrl = 'http://localhost:5000'
+    const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+    const localApiUrl = 'http://localhost:5000'
 
-  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+    const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl : localApiUrl
 
-  const navigate = useNavigate()
-  const { login } = useAuth();
+    const navigate = useNavigate()
+    const {login} = useAuth();
+    const {toast} = useToast();
 
-  // const [formData, setFormData ] = useState({
-  //   email: "",
-  //   password: "",
-  // });
+    const form = useForm({
+        resolver: zodResolver(loginSchema),
+        defaultValues: {email: "", password: ""},
+    });
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: {errors}, 
-  } = useForm();
+    const onSubmit = async (data) => {
+        console.log('Form submitted:', data)
 
-  const [message, setMessage ] = useState('')
+        try {
+            const response = await fetch(`${backendUrl}/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
+            const result = await response.json()
 
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value
-  //   }));
-  // };  
+            if (!result?.success) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Login Failed',
+                    description: result.message,
+                });
+            } else {
+                console.log("LOGIN SUCCESSFULLY")
+                const token = result.token
+                sessionStorage.setItem('token', token);
+                login(token)
+                toast({
+                    title: 'Logged In',
+                    description: 'Welcome back!'
+                });
+                navigate("/")
+            }
 
-  const onSubmit = async (data) => {
-    console.log('Form submitted:', data)
-
-    try {
-      const response = await fetch(`${backendUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      
-      const result = await response.json()
-
-      if (!result?.success) {
-        setMessage(result?.message)
-      } else {
-        console.log("LOGIN SUCCESSFULLY")
-        const token = result.token
-        sessionStorage.setItem('token', token);
-        login(token)
-        navigate("/")
-
-      }
-
-    } catch (error) {
-      console.error('Error during login:', error);
-      setMessage('Something went wrong during login.')
+        } catch (error) {
+            console.error('Error during login:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Error',
+                description: 'Something went wrong during login.',
+            });
+        }
     }
-  }
-  
-  return (
-    <div className='w-[95%] h-[70vh] bg-emerald-700 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
-      <form className="flex flex-col py-5 items-center" onSubmit={handleSubmit(onSubmit)}>
-        <h2 className='text-3xl md:text-5xl font-bold'>Animal World</h2>
-        <h2 className='italic md:text-xl'>~Let's get back to the fun!~</h2>
-        <div className='flex flex-col w-full md:w-[50%] py-6'>
-          <label htmlFor="email" className='mt-2'>
-            <strong>Email</strong>
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder='Email'
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: "Invalid email format",
-              },
-            })}
-            // value={formData.email}
-            // onChange={handleChange}
-            className='text-black pl-2 md:pl-3'
-          />
-          {errors.email && <p className="text-red-700 font-bold text-md">{errors.email.message}</p>}
 
-          <label htmlFor='password' className='mt-2'>
-            <strong>Password: </strong>
-          </label>
-          <input
-            type="password"
-            id='password'
-            name="password"
-            placeholder='*******'
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 4,
-                message: "Must be at least 4 characters",
-              },
-            })}
-            // value={formData.password}
-            // onChange={handleChange}
-            className='text-black pl-2 md:pl-3'
-          />
-          {errors.password && <p className="text-red-700 font-bold text-md">{errors.password.message}</p>}
+    return (
+        <div className="flex h-[80vh] items-center justify-center bg-emerald-700 bg-opacity-75 px-4 rounded-2xl">
+            <div
+                className="w-full max-w-md bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl p-6 sm:p-8 space-y-6">
+                <h2 className="text-2xl font-semibold text-white text-center">Login</h2>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)}
+                          className="flex flex-col gap-6">
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({field}) => (
+                                <FormItem>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="email@example.com"
+                                                className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white bg-transparent border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition"
+                                                {...field} />
+                                        </FormControl>
+                                        <Mail
+                                            size={20}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+                                        />
+                                    </div>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({field}) => (
+                                <FormItem>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="password"
+                                                className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <Lock
+                                            size={20}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+                                        />
+                                    </div>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <Button type="submit"
+                                className="w-full mt-8 rounded-full py-5 text-white bg-teal-800 shadow-md shadow-teal-500/50 border-none transition-opacity  hover:bg-teal-700">Submit</Button>
 
+                        <p className="text-center text-white text-sm">
+                            Don’t have an account?{' '}
+                            <a
+                                href="#"
+                                onClick={e => {
+                                    e.preventDefault()
+                                    navigate('/signup')
+                                }}
+                                className="text-white underline hover:opacity-80 transition"
+                            >
+                                Register
+                            </a>
+                        </p>
+                    </form>
+                </Form>
+            </div>
         </div>
-        <button className="bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white" type='submit'>Log In</button>
-        {message && <p>{message}</p>}
-      </form>
-    </div>  
-  )
+    )
 }
 
 export default Login
