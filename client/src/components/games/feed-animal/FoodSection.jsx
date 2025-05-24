@@ -1,12 +1,12 @@
 import React from 'react';
-import FoodItem from './FoodItem';
+import FoodCard from './FoodCard.jsx';
 
 
 const FoodSection = ({foods = [], onDragStart}) => {
     return (
-        <div className="flex space-x-4 p-4 bg-gray-100 rounded-md">
+        <div className="flex space-x-8 p-4 rounded-md">
             {foods.map(food => (
-                <FoodItem
+                <FoodCard
                     key={food.id}
                     food={food}
                     onDragStart={onDragStart}
