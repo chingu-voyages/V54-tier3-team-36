@@ -37,5 +37,13 @@ export const profiles = [
     role: "Web Developer",
     github: "https://github.com/Alvarado08",
     linkedin: "https://www.linkedin.com/in/jorgep-alvarado"
-  }
+  },
+
+  {
+    name: "Aigul Y",
+    role: "Web Developer",
+    github: "https://github.com/aigul-ermak",
+    linkedin: "https://www.linkedin.com/in/aigul-ermak/"
+  },
+
 ];
