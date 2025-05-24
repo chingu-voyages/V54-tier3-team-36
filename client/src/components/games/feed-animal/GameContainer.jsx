@@ -1,7 +1,12 @@
 import React from 'react';
+import Timer from "./Timer.jsx";
+import {useGameTimer} from "../hooks/useGameTimer.js";
 
 
-const GameContainer = ({ children }) => {
+const GameContainer = ({children}) => {
+    const timeLeft = useGameTimer(60000);
+
+
     return (
         <div
             className="
@@ -21,6 +26,7 @@ const GameContainer = ({ children }) => {
                 bg-center
             "
         >
+            <Timer timeLeft={timeLeft}/>
             <div className="w-full h-full flex flex-col items-center justify-center rounded-3xl p-8">
                 {children}
             </div>
