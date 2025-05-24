@@ -1,17 +1,19 @@
 import React from 'react';
+import AnimalCard from './AnimalCard.jsx';
+import gameData from '../data/game-data.json';
 
-
-const AnimalSection = () => {
+function AnimalSection() {
+    const {animals} = gameData;
     return (
-        <div className="
-      w-full max-w-[600px] h-[400px]
-      bg-gray-200 dark:bg-gray-700
-      rounded-lg border-2 border-gray-300 dark:border-gray-600
-      flex items-center justify-center
-    ">
-            <p className="text-gray-500 dark:text-gray-300">Animal Area</p>
+        <div className="flex flex-wrap space-x-8 gap-4 justify-center">
+            {animals.map(animal => (
+                <AnimalCard
+                    key={animal.id}
+                    animal={animal}
+                />
+            ))}
         </div>
     );
-};
+}
 
 export default AnimalSection;

@@ -17,6 +17,7 @@ const GameContainer = () => {
     const [score] = useScore(0);
 
     const {foods} = gameData;
+    const {animals} = gameData;
     const [draggedFoodId, setDraggedFoodId] = useState(null);
 
     const handleDragStart = (foodId) => {
@@ -32,14 +33,17 @@ const GameContainer = () => {
                 <Lives lives={lives}/>
             </div>
 
-
             <div className="w-full border rounded-md p-4 flex justify-center mb-4">
                 <FoodSection foods={foods} onDragStart={handleDragStart}/>
             </div>
 
-
             <div className="w-full border rounded-md p-8 h-[400px] flex items-center justify-center">
-                <AnimalSection/>
+                <AnimalSection
+                    animals={animals}
+                    onFeed={(animalId, foodId) => {
+                        console.log('Feed animal', animalId, 'with food', foodId);
+                    }}
+                />
             </div>
 
         </div>
