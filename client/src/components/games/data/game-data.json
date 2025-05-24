@@ -1,0 +1,37 @@
+{
+  "gameConfig": {
+    "durationMs": 60000,
+    "spawnInterval": 5000,
+    "animalsPerSpawn": 2,
+    "startingLives": 3,
+    "scorePerFeed": 100,
+    "scorePenalty": 50
+  },
+  "foods": [
+    {
+      "id": 1,
+      "name": "Carrot",
+      "image": "food.png"
+    },
+    {
+      "id": 2,
+      "name": "Fish",
+      "image": "food1.png"
+    },
+    {
+      "id": 3,
+      "name": "Cheese",
+      "image": "food2.png"
+    },
+    {
+      "id": 4,
+      "name": "Honey",
+      "image": "food3.png"
+    },
+    {
+      "id": 5,
+      "name": "Berries",
+      "image": "food4.png"
+    }
+  ]
+}
