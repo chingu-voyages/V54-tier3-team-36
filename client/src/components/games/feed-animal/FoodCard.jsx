@@ -2,9 +2,8 @@ import React from 'react';
 
 const images = import.meta.glob(
     '../../../assets/feed-food/*.{png,jpg,jpeg,svg}',
-    { eager: true, query: '?url', import: 'default' }
+    {eager: true, query: '?url', import: 'default'}
 );
-
 
 const FoodCard = ({food, onDragStart}) => {
     const src = images[`../../../assets/feed-food/${food.image}`];
@@ -13,7 +12,12 @@ const FoodCard = ({food, onDragStart}) => {
             src={src}
             alt={food.name}
             draggable
-            onDragStart={() => onDragStart(food.id)}
+            onDragStart={e => {
+                e.dataTransfer.setData('foodId', food.id);
+                e.dataTransfer.effectAllowed = 'move';
+
+                onDragStart && onDragStart(food.id);
+            }}
             className="w-24 h-24 rounded-md shadow-md cursor-grab"
         />
     );

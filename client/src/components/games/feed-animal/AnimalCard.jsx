@@ -5,12 +5,23 @@ const animalImages = import.meta.glob(
     {eager: true, query: '?url', import: 'default'}
 );
 
-function AnimalCard({animal}) {
+function AnimalCard({animal, onFeed}) {
     const src = animalImages[`../../../assets/feed-animal/${animal.image}`];
+    const handleDrop = e => {
+        e.preventDefault();
+        const foodId = Number(e.dataTransfer.getData('foodId'));
+        console.log('Dropped foodId:', foodId);
+        if (onFeed) {
+            onFeed(animal.id, foodId);
+        }
+    }
     return (
-        <div className="flex flex-col items-center">
+        <div
+            onDragOver={e => e.preventDefault()}
+            onDrop={handleDrop}
+            className="flex flex-col items-center">
             <img
-                src={src || ''}
+                src={src}
                 alt={animal.name}
                 className="w-32 h-34 object-contain"
             />

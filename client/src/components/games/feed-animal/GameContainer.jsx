@@ -16,12 +16,22 @@ const GameContainer = () => {
     const [lives] = useLives(3);
     const [score] = useScore(0);
 
+
     const {foods} = gameData;
     const {animals} = gameData;
     const [draggedFoodId, setDraggedFoodId] = useState(null);
 
     const handleDragStart = (foodId) => {
         setDraggedFoodId(foodId);
+    };
+
+    const handleFeed = (animalId, foodId) => {
+        const animal = gameData.animals.find(a => a.id === animalId);
+        if (animal.wantedFoodIds.includes(foodId)) {
+            console.log(`Good! +${gameData.gameConfig.scorePerFeed} points.`);
+        } else {
+            console.log('Oops — wrong food, you lost a life.');
+        }
     };
 
     return (
@@ -40,9 +50,7 @@ const GameContainer = () => {
             <div className="w-full border rounded-md p-8 h-[400px] flex items-center justify-center">
                 <AnimalSection
                     animals={animals}
-                    onFeed={(animalId, foodId) => {
-                        console.log('Feed animal', animalId, 'with food', foodId);
-                    }}
+                    onFeed={handleFeed}
                 />
             </div>
 
