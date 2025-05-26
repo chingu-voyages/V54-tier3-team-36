@@ -16,14 +16,7 @@ const GameContainer = () => {
     const [lives] = useLives(3);
     const [score] = useScore(0);
 
-
-    const {foods} = gameData;
-    const {animals} = gameData;
-    const [draggedFoodId, setDraggedFoodId] = useState(null);
-
-    const handleDragStart = (foodId) => {
-        setDraggedFoodId(foodId);
-    };
+    const [trayFoods, setTrayFoods] = useState(gameData.foods);
 
     const handleFeed = (animalId, foodId) => {
         const animal = gameData.animals.find(a => a.id === animalId);
@@ -32,6 +25,16 @@ const GameContainer = () => {
         } else {
             console.log('Oops — wrong food, you lost a life.');
         }
+        setTrayFoods(prev => {
+            const filtered = prev.filter(f => f.id !== foodId);
+            const available = gameData.foods.filter(
+                f => !filtered.some(ff => ff.id === f.id)
+            );
+            const replacement = available.length
+                ? available[Math.floor(Math.random() * available.length)]
+                : null;
+            return replacement ? [...filtered, replacement] : filtered;
+        });
     };
 
     return (
@@ -44,12 +47,15 @@ const GameContainer = () => {
             </div>
 
             <div className="w-full border rounded-md p-4 flex justify-center mb-4">
-                <FoodSection foods={foods} onDragStart={handleDragStart}/>
+                <FoodSection
+                    foods={trayFoods}
+                    onDragStart={() => {
+                    }}/>
             </div>
 
             <div className="w-full border rounded-md p-8 h-[400px] flex items-center justify-center">
                 <AnimalSection
-                    animals={animals}
+                    animals={gameData.animals}
                     onFeed={handleFeed}
                 />
             </div>
