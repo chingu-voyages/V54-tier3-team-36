@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Timer from "./Timer.jsx";
 import {useGameTimer} from "../hooks/useGameTimer.js";
 import {useLives} from "../hooks/useLives.js";
@@ -12,11 +12,28 @@ import AnimalSection from "./AnimalSection.jsx";
 
 
 const GameContainer = () => {
+    const { animalsPerSpawn, foodOptionCount } = gameData.gameConfig;
+
     const timeLeft = useGameTimer(60000);
     const [lives] = useLives(3);
     const [score] = useScore(0);
 
-    const [trayFoods, setTrayFoods] = useState(gameData.foods);
+    const [trayFoods, setTrayFoods] = useState(
+        shuffle(gameData.foods).slice(0, foodOptionCount)
+    );
+
+
+    const [activeAnimals, setActiveAnimals] = useState(
+        shuffle(gameData.animals).slice(0, animalsPerSpawn)
+    );
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            setActiveAnimals(shuffle(gameData.animals).slice(0, animalsPerSpawn));
+        }, gameData.gameConfig.spawnInterval);
+        return () => clearInterval(id);
+    }, [animalsPerSpawn]);
+
 
     const handleFeed = (animalId, foodId) => {
         const animal = gameData.animals.find(a => a.id === animalId);
@@ -27,12 +44,10 @@ const GameContainer = () => {
         }
         setTrayFoods(prev => {
             const filtered = prev.filter(f => f.id !== foodId);
-            const available = gameData.foods.filter(
-                f => !filtered.some(ff => ff.id === f.id)
+            const available = gameData.foods.filter(f =>
+                !filtered.some(ff => ff.id === f.id)
             );
-            const replacement = available.length
-                ? available[Math.floor(Math.random() * available.length)]
-                : null;
+            const replacement = shuffle(available)[0];
             return replacement ? [...filtered, replacement] : filtered;
         });
     };
@@ -55,7 +70,7 @@ const GameContainer = () => {
 
             <div className="w-full border rounded-md p-8 h-[400px] flex items-center justify-center">
                 <AnimalSection
-                    animals={gameData.animals}
+                    animals={activeAnimals}
                     onFeed={handleFeed}
                 />
             </div>
@@ -65,3 +80,13 @@ const GameContainer = () => {
 };
 
 export default GameContainer;
+
+
+function shuffle(array) {
+    const a = [...array];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
