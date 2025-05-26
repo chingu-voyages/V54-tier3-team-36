@@ -1,202 +1,230 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router';
-import { useAuth } from '../context/auth';
-import { useForm } from 'react-hook-form';
+import React from 'react'
+import {useNavigate} from 'react-router';
+import {useForm} from 'react-hook-form';
+import {zodResolver} from "@hookform/resolvers/zod";
+import {Lock, Mail, User} from "lucide-react";
+import {useAuth} from '../context/auth';
+import {useToast} from "@/hooks/use-toast.js";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select";
+import {Button} from "@/components/ui/button";
+import {signupSchema} from "@/schemas/auth.schema.js";
 
 const Signup = () => {
 
-  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
-  const localApiUrl = 'http://localhost:5000'
+    const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+    const localApiUrl = 'http://localhost:5000'
 
-  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+    const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl : localApiUrl
 
-  const { login } = useAuth();
+    const navigate = useNavigate();
+    const {login} = useAuth();
+    const {toast} = useToast();
 
-  const navigate = useNavigate();
-
-  const { 
-    register, 
-    handleSubmit, 
-    watch, 
-    formState: {errors}, 
-  } = useForm();
-
-
-  // const [formData, setFormData ] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  //   age: 0 //maybe will change to select/options
-  // });
-
-  const [message, setMessage ] = useState('')
-
-  // const handleChange = (e) => {
-  //   const { name, value } = e.target;
-
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value
-  //   }));
-  // };
-
-  const age = watch('age') // watch the age selection
-   
-  const onSubmit = async (data) => {
-    console.log('Form submitted:', data)
-
-    try {
-      const response = await fetch(`${backendUrl}/api/auth/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
+    const form = useForm({
+        resolver: zodResolver(signupSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            age: "",
+            consent: false,
         },
-        body: JSON.stringify(data)
-      });
-      
-      const result = await response.json()
+    });
 
-      if (!result?.success) {
-        setMessage(result?.message)
-      } else {
-        console.log(result)
-        console.log("SIGNUP SUCCESSFULLY")
-        const token = result.token
-        sessionStorage.setItem('token', token);
-        login(token)
-        navigate("/")
-      }
+    const age = form.watch("age");
 
-    } catch (error) {
-      console.error('Error during signup:', error);
-      setMessage('Something went wrong during signup.')
-    }
-  }
+    const onSubmit = async (data) => {
+        try {
+            const res = await fetch(`${backendUrl}/api/auth/signup`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data),
+            });
+            const result = await res.json();
 
-  return (
-    <div className='w-[95%] h-[70vh] bg-emerald-700 text-lg bg-opacity-75 rounded-[3vw] px-12 md:pt-12 mb-10 mx-auto mt-8'>
-      <form className="flex flex-col py-5 items-center" onSubmit={handleSubmit(onSubmit)}>
-        <h2 className='text-3xl md:text-5xl font-bold'>Animal World</h2>
-        <h2 className='italic md:text-xl'>~Ready for some fun!~</h2>
-        
-        <div className='flex flex-col w-full md:w-[50%] py-6'>
-          <label htmlFor='name'>
-            <strong>Name</strong>
-          </label>
-          <input
-            type="text"
-            id='name'
-            name="name"
-            // value={formData.name}
-            // onChange={handleChange}
-            {...register("name", { required: "Name is required" })}
-            placeholder='What should we call you?'
-            className='text-black pl-2 md:pl-3'
-          />
-          {errors.name && <p className="text-red-700 font-bold text-md">{errors.name.message}</p>}
+            if (!result?.success) {
+                toast({
+                    variant: "destructive",
+                    title: "Signup failed",
+                    description: result.message,
+                });
+            } else {
+                sessionStorage.setItem("token", result.token);
+                login(result.token);
+                toast({title: "Welcome!", description: "Account created."});
+                navigate("/");
+            }
+        } catch (error) {
+            console.error(error);
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: "Something went wrong during signup.",
+            });
+        }
+    };
 
-          <label htmlFor="email" className='mt-2'>
-            <strong>Email</strong>
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder='How we will contact you'
-            {...register("email", {
-              required: "Email is required",
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: "Invalid email format",
-              },
-            })}
-            // value={formData.email}
-            // onChange={handleChange}
-            className='text-black pl-2 md:pl-3'
-          />
-           {errors.email && <p className="text-red-700 font-bold text-md">{errors.email.message}</p>}
+    return (
+        <div className="flex h-[80vh] items-center justify-center bg-emerald-700 bg-opacity-75 px-4 rounded-2xl">
+            <div
+                className="w-full max-w-md bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl p-6 sm:p-8 space-y-6">
+                <h2 className="text-2xl font-semibold text-white text-center">
+                    Sign Up
+                </h2>
+                <Form {...form}>
+                    <form
+                        onSubmit={form.handleSubmit(onSubmit)}
+                        className="flex flex-col gap-6"
+                    >
+                        {/* Name */}
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({field}) => (
+                                <FormItem>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Name"
+                                                className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white bg-transparent border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <User
+                                            size={18}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+                                        />
+                                    </div>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
 
-          <label htmlFor='password' className='mt-2'>
-            <strong>Password: </strong>
-          </label>
-          <input
-            type="password"
-            id='password'
-            name="password"
-            placeholder='Keep it a secret!'
-            {...register("password", {
-              required: "Password is required",
-              minLength: {
-                value: 4,
-                message: "Must be at least 4 characters",
-              },
-            })}
-            // value={formData.password}
-            // onChange={handleChange}
-            className='text-black pl-2 md:pl-3'
-          />
-          {errors.password && <p className="text-red-700 font-bold text-md">{errors.password.message}</p>}
+                        {/* Email */}
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({field}) => (
+                                <FormItem>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="email@example.com"
+                                                className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white bg-transparent border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <Mail
+                                            size={18}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+                                        />
+                                    </div>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
 
-          <label htmlFor='age' className='mt-2'>
-            <strong>Age: </strong>
-          </label>
-          {/* <input
-            type="number"
-            id="age"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            className='text-black pl-2 md:pl-6'
-          /> */}
-          <select
-            name='age'
-            className='text-black pl-2 md:pl-3'
-            {...register("age", { required: "Please select your age" })}
-          >
-            <option value="">-- Select your age --</option>
-            <option value="<5">Less than 5 years old</option>
-            <option value="5-8">5-8 years old</option>
-            <option value="9-12">9-12 years old</option>
-            <option value="13-17">13-17 years old</option>
-            <option value="18+">18 years or older</option>
-          </select>
-          {errors.age && <p className="text-red-700 font-bold text-md">{errors.age.message}</p>}
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({field}) => (
+                                <FormItem>
+                                    <div className="relative">
+                                        <FormControl>
+                                            <Input
+                                                type="password"
+                                                placeholder="Create a password"
+                                                className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white bg-transparent border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <Lock
+                                            size={18}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
+                                        />
+                                    </div>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="age"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                        >
+                                            <SelectTrigger
+                                                className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white bg-transparent border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition">
+                                                <SelectValue placeholder="Select your age"/>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="<5">Less than 5</SelectItem>
+                                                <SelectItem value="5-8">5–8</SelectItem>
+                                                <SelectItem value="9-12">9–12</SelectItem>
+                                                <SelectItem value="13-17">13–17</SelectItem>
+                                                <SelectItem value="18+">18+</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
+                        {age !== "18+" && age !== "" && (
+                            <FormField
+                                control={form.control}
+                                name="consent"
+                                render={({field}) => (
+                                    <FormItem className="flex items-center space-x-2">
+                                        <FormControl>
+                                            <Checkbox
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                        <FormLabel htmlFor="consent" className="m-0 p-0 text-white">
+                                            I have permission from a parent or guardian.
+                                        </FormLabel>
+                                        <FormMessage/>
+                                    </FormItem>
+                                )}
+                            />
+                        )}
+
+                        <Button
+                            type="submit"
+                            className="w-full mt-4 rounded-full py-3 bg-teal-800 text-white transition hover:bg-teal-700"
+                        >
+                            Sign Up
+                        </Button>
+
+                        <p className="text-center text-white text-sm">
+                            Already have an account?{' '}
+                            <a
+                                href="#"
+                                onClick={e => {
+                                    e.preventDefault()
+                                    navigate('/login')
+                                }}
+                                className="text-white underline hover:text-teal-800 transition"
+                            >
+                                Log In
+                            </a>
+                        </p>
+                    </form>
+                </Form>
+            </div>
         </div>
-
-        {age !== "18+" && age !== "" && (
-          <>
-          <div className='flex items-center space-x-2'>
-            <input
-              type="checkbox"
-              className='h-5 w-5'
-              {...register("consent", {
-                validate: (value) => {
-                  if (age !== "18+" && age !== "") {
-                  return value === true || "Parent/Guardian consent is required.";
-                }
-                return true;
-                },
-              })}
-            />
-            <label className="text-lg font-semibold">
-            I have permission from a parent or guardian.
-            </label>
-          </div>
-          {errors.consent && <p className="text-red-700 font-bold text-md">{errors.consent.message}</p>}
-          </>
-        )}
-
-        <button className="mt-2 bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white border-none" type='submit'>Sign up</button>
-        {message && <p>{message}</p>}
-
-        <p className=''>Already signed up?  
-          <Link to="/login"> 
-            <button className='bg-teal-800 shadow-md shadow-teal-500/50 hover:opacity-85 rounded-full text-white ml-2 border-none'>Login</button>
-          </Link>
-        </p>
-      </form>
-    </div>
-  )
-}
-
+    );
+};
 export default Signup
