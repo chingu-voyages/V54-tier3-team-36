@@ -17,7 +17,7 @@ export function useGameSession() {
 
     const timeLeft = useGameTimer(durationMs);
     const [lives, loseLife] = useLives(startingLives);
-    const [score, addScore] = useScore(0);
+    const [score, addScore, resetScore] = useScore(0);
 
     const [trayFoods, setTrayFoods] = useState(
         () => shuffleCards(gameData.foods).slice(0, foodOptionCount)
@@ -34,8 +34,19 @@ export function useGameSession() {
             addScore(scorePerFeed);
             console.log(`Correct! +${scorePerFeed} points`);
         } else {
-            addScore(-scorePenalty);
-            console.log(`Wrong! –${scorePenalty} points`);
+            if (score < scorePenalty) {
+                resetScore();
+                loseLife();
+                console.log(
+                    `Penalty would go negative. Score reset to 0, lives now: ${lives - 1}`
+                );
+            } else {
+                // Safe to subtract
+                addScore(-scorePenalty);
+                console.log(
+                    `Wrong! -${scorePenalty} → Total: ${score - scorePenalty}`
+                );
+            }
         }
 
         setTrayFoods(prev => {
