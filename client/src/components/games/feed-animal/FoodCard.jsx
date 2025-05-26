@@ -8,18 +8,21 @@ const images = import.meta.glob(
 const FoodCard = ({food, onDragStart}) => {
     const src = images[`../../../assets/feed-food/${food.image}`];
     return (
-        <img
-            src={src}
-            alt={food.name}
-            draggable
-            onDragStart={e => {
-                e.dataTransfer.setData('foodId', food.id);
-                e.dataTransfer.effectAllowed = 'move';
+        <div className="flex flex-col items-center">
+            <img
+                src={src}
+                alt={food.name}
+                draggable
+                onDragStart={e => {
+                    e.dataTransfer.setData('foodId', food.id);
+                    e.dataTransfer.effectAllowed = 'move';
 
-                onDragStart && onDragStart(food.id);
-            }}
-            className="w-24 h-24 rounded-md shadow-md cursor-grab"
-        />
+                    onDragStart && onDragStart(food.id);
+                }}
+                className="w-24 h-24 rounded-md shadow-md cursor-grab"
+            />
+            <div className="mt-2 text-sm font-medium">{food.name}</div>
+        </div>
     );
 };
 
