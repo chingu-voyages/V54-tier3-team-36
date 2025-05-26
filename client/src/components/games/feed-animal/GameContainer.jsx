@@ -12,16 +12,15 @@ import AnimalSection from "./AnimalSection.jsx";
 
 
 const GameContainer = () => {
-    const { animalsPerSpawn, foodOptionCount } = gameData.gameConfig;
+    const { durationMs, startingLives, animalsPerSpawn, foodOptionCount } = gameData.gameConfig;
 
-    const timeLeft = useGameTimer(60000);
-    const [lives] = useLives(3);
+    const timeLeft = useGameTimer(durationMs);
+    const [lives] = useLives(startingLives);
     const [score] = useScore(0);
 
     const [trayFoods, setTrayFoods] = useState(
         shuffle(gameData.foods).slice(0, foodOptionCount)
     );
-
 
     const [activeAnimals, setActiveAnimals] = useState(
         shuffle(gameData.animals).slice(0, animalsPerSpawn)
@@ -49,6 +48,14 @@ const GameContainer = () => {
             );
             const replacement = shuffle(available)[0];
             return replacement ? [...filtered, replacement] : filtered;
+        });
+        setActiveAnimals(prev => {
+            const remaining = prev.filter(a => a.id !== animalId);
+            const availableAnimals = gameData.animals.filter(
+                a => !remaining.some(r => r.id === a.id)
+            );
+            const newAnimal = shuffle(availableAnimals)[0];
+            return newAnimal ? [...remaining, newAnimal] : remaining;
         });
     };
 
