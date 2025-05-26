@@ -3,6 +3,7 @@
     "durationMs": 60000,
     "spawnInterval": 5000,
     "animalsPerSpawn": 2,
+    "foodOptionCount":  4,
     "startingLives": 3,
     "scorePerFeed": 100,
     "scorePenalty": 50
