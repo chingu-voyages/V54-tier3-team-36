@@ -1,36 +1,29 @@
 import mongoose from 'mongoose';
+import GameStatSchema from './GameStat.js';
+
+const { Schema, model } = mongoose;
 
 
-const dashboardSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
+const dashboardSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-    
-  slidingPuzzle: {
+  
+  quiz: {
     type: {
       numOfTries: { type: Number, default: 0 },
       highestPoints: { type: Number, default: 0 }
     }
-  }, 
-
-  guessSound: {
-    type: {
-      numOfTries: { type: Number, default: 0 },
-      highestPoints: { type: Number, default: 0 }
-    }
-  }, 
-
-  flashCard: {
-    type: {
-      numOfTries: { type: Number, default: 0 },
-      highestPoints: { type: Number, default: 0 }
-    }
-  }, 
+  },
+  games: {
+    type: [GameStatSchema],
+    default: () => []
+  }
 
 })
 
-const Dashboard = mongoose.model('Dashboard', dashboardSchema);
+const Dashboard = model('Dashboard', dashboardSchema);
 
 export default Dashboard;
