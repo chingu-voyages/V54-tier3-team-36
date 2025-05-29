@@ -11,15 +11,20 @@ const dashboardSchema = new Schema({
     required: true
   },
   
-  quiz: {
-    type: {
-      numOfTries: { type: Number, default: 0 },
-      highestPoints: { type: Number, default: 0 }
-    }
-  },
+  // quiz: {
+  //   type: {
+  //     numOfTries: { type: Number, default: 0 },
+  //     highestPoints: { type: Number, default: 0 }
+  //   }
+  // },
   games: {
     type: [GameStatSchema],
     default: () => []
+  },
+
+  badges: {
+    type: [String],
+    default: []
   }
 
 })
