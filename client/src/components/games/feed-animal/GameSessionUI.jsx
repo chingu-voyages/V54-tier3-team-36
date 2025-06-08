@@ -4,6 +4,7 @@ import Score from './Score.jsx';
 import Lives from './Lives.jsx';
 import FoodSection from './FoodSection.jsx';
 import AnimalSection from './AnimalSection.jsx';
+import StatsModal from './StatsModal.jsx';
 import {useGameSession} from './hooks/useGameSession.js';
 
 
@@ -14,7 +15,8 @@ export default function GameSessionUI({onRestart}) {
         score,
         trayFoods,
         activeAnimals,
-        handleFeed
+        handleFeed,
+        messages
     } = useGameSession();
 
     const gameOver = lives <= 0 || timeLeft <= 0;
@@ -47,8 +49,11 @@ export default function GameSessionUI({onRestart}) {
                 <FoodSection foods={trayFoods} />
             </div>
 
-            <div className="w-full border rounded-md p-8 h-[400px] flex items-center justify-center">
-                <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
+            <div className="w-full">
+                <div className="border rounded-md p-8 h-[400px] flex items-center justify-center mb-4">
+                    <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
+                </div>
+                <StatsModal messages={messages} />
             </div>
         </div>
     );
