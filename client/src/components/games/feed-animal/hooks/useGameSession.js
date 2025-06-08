@@ -9,6 +9,9 @@ import { shuffleCards } from "@/components/games/feed-animal/helpers/shuffleCard
 // Maximum number of messages to keep in the log
 const MAX_MESSAGES = 5;
 export function useGameSession() {
+    // Game over state
+    const [gameOver, setGameOver] = useState({ isOver: false, reason: '' });
+    
     // Destructure game configuration
     const gameConfig = useMemo(() => ({
         durationMs: gameData.gameConfig.durationMs,
@@ -157,18 +160,27 @@ export function useGameSession() {
     }, [score, addScore, addMessage, lives, loseLife, gameConfig?.scorePerFeed, gameConfig?.scorePenalty]);
 
 
-    // Game over when no lives left
-    const gameOver = lives <= 0;
+    // Check for game over conditions
+    useEffect(() => {
+        if (lives <= 0 && !gameOver.isOver) {
+            setGameOver({ isOver: true, reason: 'You ran out of lives!' });
+            addMessage('Game Over! You ran out of lives!');
+        } else if (timeLeft <= 0 && !gameOver.isOver) {
+            setGameOver({ isOver: true, reason: 'Time is up!' });
+            addMessage('Game Over! Time is up!');
+        }
+    }, [lives, timeLeft, gameOver.isOver, addMessage]);
 
     return {
         timeLeft,
         lives,
-        score, // Ensure score never goes below 0
+        score,
         trayFoods,
         activeAnimals,
         handleFeed,
         messages,
         addMessage,
-        gameOver
+        gameOver: gameOver.isOver,
+        gameOverReason: gameOver.reason
     };
 }

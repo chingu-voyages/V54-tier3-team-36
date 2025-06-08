@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import Timer from './Timer.jsx';
 import Score from './Score.jsx';
 import Lives from './Lives.jsx';
@@ -6,6 +6,32 @@ import FoodSection from './FoodSection.jsx';
 import AnimalSection from './AnimalSection.jsx';
 import StatsModal from './StatsModal.jsx';
 import { useGameSession } from './hooks/useGameSession.js';
+
+// Game Over Screen Component
+const GameOverScreen = ({ reason, score, onRestart }) => (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4 text-center animate-fade-in">
+            <div className="mb-6">
+                <h2 className="text-3xl font-bold text-red-600 mb-2">Game Over!</h2>
+                <p className="text-lg text-gray-700">{reason}</p>
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                <p className="text-4xl font-bold text-blue-600">{score}</p>
+                <p className="text-sm text-gray-500">Final Score</p>
+            </div>
+            
+            <button
+                onClick={onRestart}
+                className="w-full max-w-xs px-6 py-3 bg-blue-600 text-white rounded-lg 
+                           hover:bg-blue-700 transition-all font-semibold text-lg
+                           transform hover:scale-105 active:scale-95 shadow-lg"
+            >
+                Play Again
+            </button>
+        </div>
+    </div>
+);
 
 export default function GameSessionUI({onRestart}) {
     const {
@@ -17,7 +43,8 @@ export default function GameSessionUI({onRestart}) {
         handleFeed,
         messages,
         addMessage,
-        gameOver
+        gameOver,
+        gameOverReason
     } = useGameSession();
 
     // Show game over when time's up or no lives left
@@ -32,16 +59,11 @@ export default function GameSessionUI({onRestart}) {
 
     if (isGameOver) {
         return (
-            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 p-6 rounded-lg shadow-lg">
-                <h1 className="text-4xl font-bold mb-4 text-red-600">Game Over</h1>
-                <p className="text-xl mb-6">Your final score: <span className="font-bold">{score}</span></p>
-                <button
-                    onClick={onRestart}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
-                >
-                    Play Again
-                </button>
-            </div>
+            <GameOverScreen 
+                reason={gameOverReason || 'Game Over!'}
+                score={score}
+                onRestart={onRestart}
+            />
         );
     }
 
