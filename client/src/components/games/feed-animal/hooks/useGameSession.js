@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo } from 'react';
+import {useCallback, useState, useMemo, useRef, useEffect} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import gameData from '../../data/game-data.json';
 import { useGameTimer } from './useGameTimer';
@@ -21,71 +21,136 @@ export function useGameSession() {
 
     // Game state hooks
     const timeLeft = useGameTimer(gameConfig.durationMs);
-    const [lives, loseLife] = useLives(gameConfig.startingLives);
-    const [score, addScore, resetScore] = useScore(0);
+    const [lives] = useLives(gameConfig.startingLives);
+    const [score, addScore] = useScore(0);
     const [messages, setMessages] = useState([]);
+    const messagesRef = useRef(messages);
+    messagesRef.current = messages;
 
-    // Initialize tray foods and active animals
-    const [trayFoods, setTrayFoods] = useState(() => 
-        shuffleCards([...gameData.foods]).slice(0, gameConfig.foodOptionCount)
-    );
+    // Initialize tray foods and active animals with error handling
+    const [trayFoods, setTrayFoods] = useState(() => {
+        try {
+            const foods = Array.isArray(gameData?.foods) ? [...gameData.foods] : [];
+            const shuffled = shuffleCards(foods);
+            return shuffled.slice(0, Math.min(gameConfig.foodOptionCount, foods.length));
+        } catch (error) {
+            console.error('Error initializing tray foods:', error);
+            return [];
+        }
+    });
     
-    const [activeAnimals, setActiveAnimals] = useState(() => 
-        shuffleCards([...gameData.animals]).slice(0, gameConfig.animalsPerSpawn)
-    );
+    const [activeAnimals, setActiveAnimals] = useState(() => {
+        try {
+            const animals = Array.isArray(gameData?.animals) ? [...gameData.animals] : [];
+            const shuffled = shuffleCards(animals);
+            return shuffled.slice(0, Math.min(gameConfig.animalsPerSpawn, animals.length));
+        } catch (error) {
+            console.error('Error initializing active animals:', error);
+            return [];
+        }
+    });
     
     // Add message to log
     const addMessage = useCallback((text) => {
-        setMessages(prev => {
-            const newMessage = {
-                id: uuidv4(),
-                text,
-                timestamp: new Date().toLocaleTimeString()
-            };
-            // Keep only the last MAX_MESSAGES messages
-            const updatedMessages = [...prev, newMessage];
+        if (!text) return; // Skip empty messages
+        
+        const newMessage = {
+            id: uuidv4(),
+            text,
+            timestamp: new Date().toLocaleTimeString()
+        };
+        
+        setMessages(prevMessages => {
+            // Filter out any existing welcome message
+            const filtered = prevMessages.filter(msg => 
+                !(msg.text && msg.text.includes('Welcome!'))
+            );
+            const updatedMessages = [...filtered, newMessage];
             return updatedMessages.slice(-MAX_MESSAGES);
         });
     }, []);
+    
+    // Add welcome message on first render only
+    useEffect(() => {
+        const welcomeMessage = {
+            id: 'welcome',
+            text: 'Welcome! Feed the animals by dragging food to them.',
+            timestamp: new Date().toLocaleTimeString()
+        };
+        setMessages([welcomeMessage]);
+        
+        // Cleanup function to clear messages on unmount
+        return () => setMessages([]);
+    }, []);
 
     const handleFeed = useCallback((animalId, foodId) => {
-        // Find the animal and food objects
-        const animal = gameData.animals.find(a => a.id === animalId);
-        const food = gameData.foods.find(f => f.id === foodId);
-        
-        if (!animal || !food) return; // Guard clause for invalid IDs
-        
-        const isCorrect = animal.wantedFoodIds.includes(foodId);
+        try {
+            if (!animalId || !foodId) {
+                console.warn('Missing animalId or foodId');
+                return;
+            }
 
-        // Handle scoring and messaging
-        if (isCorrect) {
-            addScore(gameConfig.scorePerFeed);
-            addMessage(`✅ Correct! ${animal.name} loves ${food.name}! +${gameConfig.scorePerFeed} points`);
-        } else {
-            addScore(-gameConfig.scorePenalty);
-            addMessage(`❌ Oops! ${animal.name} doesn't eat ${food.name}. -${gameConfig.scorePenalty} points`);
+            // Safely find the animal and food objects
+            const animal = gameData?.animals?.find(a => a?.id === animalId);
+            const food = gameData?.foods?.find(f => f?.id === foodId);
+            
+            if (!animal || !food) {
+                console.warn('Animal or food not found:', { animalId, foodId });
+                return;
+            }
+
+            const isCorrect = animal?.wantedFoodIds?.includes?.(foodId) ?? false;
+            const points = gameConfig?.scorePerFeed ?? 100;
+            const penalty = gameConfig?.scorePenalty ?? 50;
+
+            // Handle scoring and messaging
+            if (isCorrect) {
+                addScore(points);
+                addMessage(`✅ Correct! ${animal?.name || 'Animal'} loves ${food?.name || 'food'}! +${points} points`);
+            } else {
+                addScore(-penalty);
+                addMessage(`❌ Oops! ${animal?.name || 'Animal'} doesn't eat ${food?.name || 'that'}. -${penalty} points`);
+            }
+
+            // Update tray foods
+            setTrayFoods(prevTrayFoods => {
+                try {
+                    const filtered = (prevTrayFoods || []).filter(f => f?.id !== foodId);
+                    const usedFoodIds = new Set(filtered.map(f => f?.id).filter(Boolean));
+                    const candidates = (gameData?.foods || []).filter(f => f?.id && !usedFoodIds.has(f.id));
+                    
+                    if (!candidates?.length) return filtered || [];
+                    
+                    const shuffled = shuffleCards([...candidates]);
+                    const nextFood = shuffled[0];
+                    return nextFood ? [...filtered, nextFood] : filtered;
+                } catch (error) {
+                    console.error('Error updating tray foods:', error);
+                    return prevTrayFoods || [];
+                }
+            });
+
+            // Update active animals
+            setActiveAnimals(prevActiveAnimals => {
+                try {
+                    const filtered = (prevActiveAnimals || []).filter(a => a?.id !== animalId);
+                    const usedAnimalIds = new Set(filtered.map(a => a?.id).filter(Boolean));
+                    const candidates = (gameData?.animals || []).filter(a => a?.id && !usedAnimalIds.has(a.id));
+                    
+                    if (!candidates?.length) return filtered || [];
+                    
+                    const shuffled = shuffleCards([...candidates]);
+                    const nextAnimal = shuffled[0];
+                    return nextAnimal ? [...filtered, nextAnimal] : filtered;
+                } catch (error) {
+                    console.error('Error updating active animals:', error);
+                    return prevActiveAnimals || [];
+                }
+            });
+        } catch (error) {
+            console.error('Error in handleFeed:', error);
         }
-
-        // Update tray foods
-        setTrayFoods(prev => {
-            const filtered = prev.filter(f => f.id !== foodId);
-            const candidates = gameData.foods.filter(
-                f => !filtered.some(ff => ff.id === f.id)
-            );
-            const nextFood = candidates.length > 0 ? shuffleCards([...candidates])[0] : null;
-            return nextFood ? [...filtered, nextFood] : filtered;
-        });
-
-        // Update active animals
-        setActiveAnimals(prev => {
-            const filtered = prev.filter(a => a.id !== animalId);
-            const candidates = gameData.animals.filter(
-                a => !filtered.some(ff => ff.id === a.id)
-            );
-            const nextAnimal = candidates.length > 0 ? shuffleCards([...candidates])[0] : null;
-            return nextAnimal ? [...filtered, nextAnimal] : filtered;
-        });
-    }, [addScore, addMessage, gameConfig.scorePerFeed, gameConfig.scorePenalty]);
+    }, [addScore, addMessage, gameConfig?.scorePerFeed, gameConfig?.scorePenalty]);
 
 
     return {
@@ -95,6 +160,7 @@ export function useGameSession() {
         trayFoods,
         activeAnimals,
         handleFeed,
-        messages
+        messages,
+        addMessage
     };
 }

@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Timer from './Timer.jsx';
 import Score from './Score.jsx';
 import Lives from './Lives.jsx';
 import FoodSection from './FoodSection.jsx';
 import AnimalSection from './AnimalSection.jsx';
 import StatsModal from './StatsModal.jsx';
-import {useGameSession} from './hooks/useGameSession.js';
-
+import { useGameSession } from './hooks/useGameSession.js';
 
 export default function GameSessionUI({onRestart}) {
     const {
@@ -16,10 +15,18 @@ export default function GameSessionUI({onRestart}) {
         trayFoods,
         activeAnimals,
         handleFeed,
-        messages
+        messages,
+        addMessage
     } = useGameSession();
 
     const gameOver = lives <= 0 || timeLeft <= 0;
+
+    // Add initial welcome message - moved before any conditional returns
+    useEffect(() => {
+        if (messages.length === 0 && !gameOver) {
+            addMessage('Welcome! Feed the animals by dragging food to them.');
+        }
+    }, [messages.length, addMessage, gameOver]);
 
     if (gameOver) {
         return (
@@ -36,24 +43,40 @@ export default function GameSessionUI({onRestart}) {
         );
     }
 
-
     return (
-        <div className="flex flex-col space-y-4">
-            <div className="w-full h-20 border rounded-md p-2 flex justify-between items-center">
+        <div className="flex flex-col h-[calc(100vh-100px)]">
+            {/* Header with game stats */}
+            <div className="w-full h-16 border rounded-md p-2 flex justify-between items-center mb-2">
                 <Timer timeLeft={timeLeft} />
                 <Score score={score} />
                 <Lives lives={lives} />
             </div>
 
-            <div className="w-full border rounded-md p-4 flex justify-center">
-                <FoodSection foods={trayFoods} />
-            </div>
-
-            <div className="w-full">
-                <div className="border rounded-md p-8 h-[400px] flex items-center justify-center mb-4">
-                    <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
+            {/* Main game area */}
+            <div className="flex-1 flex flex-col gap-3 overflow-hidden">
+                {/* Food section */}
+                <div className="border rounded-md p-3 flex-1 flex flex-col">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Food Tray</h3>
+                    <div className="flex-1 flex items-center justify-center">
+                        <FoodSection foods={trayFoods} />
+                    </div>
                 </div>
-                <StatsModal messages={messages} />
+
+                {/* Animal section */}
+                <div className="border rounded-md p-3 flex-1 flex flex-col">
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Animals</h3>
+                    <div className="flex-1 flex items-center justify-center">
+                        <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
+                    </div>
+                </div>
+
+                {/* Game log */}
+                <div className="border rounded-md p-3 flex-shrink-0" style={{ height: '150px' }}>
+                    <h3 className="text-sm font-medium text-gray-700 mb-2">Game Log</h3>
+                    <div className="h-[calc(100%-28px)] overflow-y-auto">
+                        <StatsModal messages={messages} />
+                    </div>
+                </div>
             </div>
         </div>
     );

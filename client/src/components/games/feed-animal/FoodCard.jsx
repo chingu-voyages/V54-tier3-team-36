@@ -5,7 +5,7 @@ const images = import.meta.glob(
     {eager: true, query: '?url', import: 'default'}
 );
 
-const FoodCard = ({food, onDragStart}) => {
+const FoodCard = ({food}) => {
     const src = images[`../../../assets/feed-food/${food.image}`];
     return (
         <div className="flex flex-col items-center">
@@ -16,8 +16,6 @@ const FoodCard = ({food, onDragStart}) => {
                 onDragStart={e => {
                     e.dataTransfer.setData('foodId', food.id);
                     e.dataTransfer.effectAllowed = 'move';
-
-                    onDragStart && onDragStart(food.id);
                 }}
                 className="w-24 h-24 rounded-md shadow-md cursor-grab"
             />

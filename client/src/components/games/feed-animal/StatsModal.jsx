@@ -1,26 +1,29 @@
 import React from 'react';
 
-const StatsModal = ({ messages }) => {
-    if (!messages?.length) return null;
+const StatsModal = ({ messages = [] }) => {
+    if (!messages.length) {
+        return (
+            <div className="text-sm text-gray-500 italic p-2">
+                No messages yet. Start playing to see game logs.
+            </div>
+        );
+    }
 
     return (
-        <div className="w-full mt-4">
-            <div className="bg-white rounded-lg shadow-md p-4 border border-gray-200">
-                <h3 className="text-sm font-medium text-gray-700 mb-2">Game Log</h3>
-                <div className="space-y-2">
-                    {messages.slice().reverse().map((msg) => (
-                        <div 
-                            key={msg.id} 
-                            className="text-xs p-2 rounded bg-gray-50 border border-gray-100"
-                        >
-                            <div className="flex justify-between items-center">
-                                <span className="font-medium">{msg.text}</span>
-                                <span className="text-gray-500 text-xs">{msg.timestamp}</span>
-                            </div>
-                        </div>
-                    ))}
+        <div className="space-y-1.5">
+            {messages.map((msg) => (
+                <div 
+                    key={msg.id} 
+                    className="text-xs p-2 bg-gray-50 rounded border border-gray-100 hover:bg-gray-100 transition-colors"
+                >
+                    <div className="flex justify-between items-start">
+                        <span className="flex-1 pr-2">{msg.text}</span>
+                        <span className="text-gray-400 text-2xs whitespace-nowrap">
+                            {msg.timestamp}
+                        </span>
+                    </div>
                 </div>
-            </div>
+            ))}
         </div>
     );
 };
