@@ -7,7 +7,7 @@ import { useScore } from './useScore';
 import { shuffleCards } from "@/components/games/feed-animal/helpers/shuffleCards";
 
 // Maximum number of messages to keep in the log
-const MAX_MESSAGES = 3;
+const MAX_MESSAGES = 5;
 export function useGameSession() {
     // Destructure game configuration
     const gameConfig = useMemo(() => ({
@@ -21,7 +21,7 @@ export function useGameSession() {
 
     // Game state hooks
     const timeLeft = useGameTimer(gameConfig.durationMs);
-    const [lives, setLives, loseLife] = useLives(gameConfig.startingLives);
+    const [lives, loseLife] = useLives(gameConfig.startingLives);
     const [score, addScore] = useScore(0);
     const [messages, setMessages] = useState([]);
     const messagesRef = useRef(messages);
@@ -50,7 +50,7 @@ export function useGameSession() {
         }
     });
     
-    // Add message to log
+    // Add message to log (newest first)
     const addMessage = useCallback((text) => {
         if (!text) return; // Skip empty messages
         
@@ -61,12 +61,12 @@ export function useGameSession() {
         };
         
         setMessages(prevMessages => {
-            // Filter out any existing welcome message
-            const filtered = prevMessages.filter(msg => 
-                !(msg.text && msg.text.includes('Welcome!'))
-            );
-            const updatedMessages = [...filtered, newMessage];
-            return updatedMessages.slice(-MAX_MESSAGES);
+            // Keep all messages except the welcome message
+            const filtered = prevMessages.filter(msg => msg.id !== 'welcome');
+            // Add new message at the beginning of the array
+            const updated = [newMessage, ...filtered];
+            // Keep only the last MAX_MESSAGES messages
+            return updated.slice(0, MAX_MESSAGES);
         });
     }, []);
     
@@ -86,7 +86,6 @@ export function useGameSession() {
     const handleFeed = useCallback((animalId, foodId) => {
         try {
             if (!animalId || !foodId) {
-                console.warn('Missing animalId or foodId');
                 return;
             }
 
@@ -95,26 +94,25 @@ export function useGameSession() {
             const food = gameData?.foods?.find(f => f?.id === foodId);
             
             if (!animal || !food) {
-                console.warn('Animal or food not found:', { animalId, foodId });
                 return;
             }
 
             const isCorrect = animal?.wantedFoodIds?.includes?.(foodId) ?? false;
             const points = isCorrect ? (gameConfig?.scorePerFeed ?? 100) : -(gameConfig?.scorePenalty ?? 50);
+            const newScore = score + points;
             
-            // Update score
+            // Update the score
             addScore(points);
-            
-            // Handle messaging
+
             if (isCorrect) {
                 addMessage(`✅ Correct! ${animal?.name || 'Animal'} loves ${food?.name || 'food'}! +${points} points`);
             } else {
-                addMessage(`❌ Oops! ${animal?.name || 'Animal'} doesn't eat ${food?.name || 'that'}. -${Math.abs(points)} points`);
-                
-                // Lose a life for wrong answer
-                if (lives > 0) {
+                addMessage(`❌ Oops! ${animal?.name || 'Animal'} doesn't eat ${food?.name || 'that'}. ${points} points`);
+
+                // Only lose a life if the NEW TOTAL score is less than 0
+                if (newScore < 0 && lives > 0) {
                     loseLife(1);
-                    addMessage('💔 Lost a life!');
+                    addMessage('💔 Lost a life! Score went negative!');
                 }
             }
 
@@ -156,7 +154,7 @@ export function useGameSession() {
         } catch (error) {
             console.error('Error in handleFeed:', error);
         }
-    }, [addScore, addMessage, gameConfig?.scorePerFeed, gameConfig?.scorePenalty]);
+    }, [score, addScore, addMessage, lives, loseLife, gameConfig?.scorePerFeed, gameConfig?.scorePenalty]);
 
 
     // Game over when no lives left
@@ -165,7 +163,7 @@ export function useGameSession() {
     return {
         timeLeft,
         lives,
-        score: Math.max(0, score), // Ensure score never goes below 0
+        score, // Ensure score never goes below 0
         trayFoods,
         activeAnimals,
         handleFeed,
