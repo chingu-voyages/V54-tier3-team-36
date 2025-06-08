@@ -16,65 +16,100 @@ export default function GameSessionUI({onRestart}) {
         activeAnimals,
         handleFeed,
         messages,
-        addMessage
+        addMessage,
+        gameOver
     } = useGameSession();
 
-    const gameOver = lives <= 0 || timeLeft <= 0;
+    // Show game over when time's up or no lives left
+    const isGameOver = gameOver || timeLeft <= 0;
 
-    // Add initial welcome message - moved before any conditional returns
+    // Add initial welcome message
     useEffect(() => {
         if (messages.length === 0 && !gameOver) {
             addMessage('Welcome! Feed the animals by dragging food to them.');
         }
     }, [messages.length, addMessage, gameOver]);
 
-    if (gameOver) {
+    if (isGameOver) {
         return (
-            <div className="w-full h-full flex flex-col items-center justify-center">
-                <h1 className="text-4xl font-bold mb-4">Game Over</h1>
-                <p className="mb-2">Your Score: {score}</p>
+            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-50 p-6 rounded-lg shadow-lg">
+                <h1 className="text-4xl font-bold mb-4 text-red-600">Game Over</h1>
+                <p className="text-xl mb-6">Your final score: <span className="font-bold">{score}</span></p>
                 <button
                     onClick={onRestart}
-                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
                 >
-                    Restart
+                    Play Again
                 </button>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-100px)]">
-            {/* Header with game stats */}
-            <div className="w-full h-16 border rounded-md p-2 flex justify-between items-center mb-2">
-                <Timer timeLeft={timeLeft} />
-                <Score score={score} />
-                <Lives lives={lives} />
+        <div className="flex flex-col h-[calc(100vh-100px)] bg-gray-100">
+            {/* Stats Row */}
+            <div className="bg-white shadow-md p-4 mb-6">
+                <div className="container mx-auto">
+                    <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Feed the Animal</h1>
+                    <div className="flex justify-center gap-8">
+                        <div className="flex items-center bg-blue-50 px-4 py-2 rounded-lg">
+                            <span className="text-blue-600 text-xl mr-2">⏱️</span>
+                            <div>
+                                <div className="text-xs text-gray-500">Time Left</div>
+                                <div className="text-lg font-bold">{Math.ceil(timeLeft / 1000)}s</div>
+                            </div>
+                        </div>
+                        <div className="flex items-center bg-green-50 px-4 py-2 rounded-lg">
+                            <span className="text-green-600 text-xl mr-2">🏆</span>
+                            <div>
+                                <div className="text-xs text-gray-500">Score</div>
+                                <div className="text-lg font-bold">{score}</div>
+                            </div>
+                        </div>
+                        <div className="flex items-center bg-red-50 px-4 py-2 rounded-lg">
+                            <span className="text-red-500 text-xl mr-2">❤️</span>
+                            <div>
+                                <div className="text-xs text-gray-500">Lives</div>
+                                <div className="text-lg font-bold">{lives}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            {/* Main game area */}
-            <div className="flex-1 flex flex-col gap-3 overflow-hidden">
-                {/* Food section */}
-                <div className="border rounded-md p-3 flex-1 flex flex-col">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Food Tray</h3>
-                    <div className="flex-1 flex items-center justify-center">
-                        <FoodSection foods={trayFoods} />
-                    </div>
-                </div>
+            {/* Three Column Layout */}
+            <div className="flex-1 overflow-auto">
+                <div className="container mx-auto px-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* Food Tray Column */}
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                            <div className="bg-blue-50 px-4 py-3 border-b">
+                                <h2 className="text-lg font-semibold text-gray-800">Food Tray</h2>
+                            </div>
+                            <div className="flex-1 overflow-y-auto">
+                                <FoodSection foods={trayFoods} />
+                            </div>
+                        </div>
 
-                {/* Animal section */}
-                <div className="border rounded-md p-3 flex-1 flex flex-col">
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Animals</h3>
-                    <div className="flex-1 flex items-center justify-center">
-                        <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
-                    </div>
-                </div>
+                        {/* Hungry Animals Column */}
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                            <div className="bg-green-50 px-4 py-3 border-b">
+                                <h2 className="text-lg font-semibold text-gray-800">Hungry Animals</h2>
+                            </div>
+                            <div className="flex-1 overflow-y-auto">
+                                <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
+                            </div>
+                        </div>
 
-                {/* Game log */}
-                <div className="border rounded-md p-3 flex-shrink-0" style={{ height: '150px' }}>
-                    <h3 className="text-sm font-medium text-gray-700 mb-2">Game Log</h3>
-                    <div className="h-[calc(100%-28px)] overflow-y-auto">
-                        <StatsModal messages={messages} />
+                        {/* Game Log Column */}
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div className="bg-purple-50 px-4 py-3 border-b">
+                                <h2 className="text-lg font-semibold text-gray-800">Game Log</h2>
+                            </div>
+                            <div className="p-4 h-[300px] overflow-y-auto">
+                                <StatsModal messages={messages} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

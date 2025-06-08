@@ -21,7 +21,7 @@ export function useGameSession() {
 
     // Game state hooks
     const timeLeft = useGameTimer(gameConfig.durationMs);
-    const [lives] = useLives(gameConfig.startingLives);
+    const [lives, setLives, loseLife] = useLives(gameConfig.startingLives);
     const [score, addScore] = useScore(0);
     const [messages, setMessages] = useState([]);
     const messagesRef = useRef(messages);
@@ -100,16 +100,22 @@ export function useGameSession() {
             }
 
             const isCorrect = animal?.wantedFoodIds?.includes?.(foodId) ?? false;
-            const points = gameConfig?.scorePerFeed ?? 100;
-            const penalty = gameConfig?.scorePenalty ?? 50;
-
-            // Handle scoring and messaging
+            const points = isCorrect ? (gameConfig?.scorePerFeed ?? 100) : -(gameConfig?.scorePenalty ?? 50);
+            
+            // Update score
+            addScore(points);
+            
+            // Handle messaging
             if (isCorrect) {
-                addScore(points);
                 addMessage(`✅ Correct! ${animal?.name || 'Animal'} loves ${food?.name || 'food'}! +${points} points`);
             } else {
-                addScore(-penalty);
-                addMessage(`❌ Oops! ${animal?.name || 'Animal'} doesn't eat ${food?.name || 'that'}. -${penalty} points`);
+                addMessage(`❌ Oops! ${animal?.name || 'Animal'} doesn't eat ${food?.name || 'that'}. -${Math.abs(points)} points`);
+                
+                // Lose a life for wrong answer
+                if (lives > 0) {
+                    loseLife(1);
+                    addMessage('💔 Lost a life!');
+                }
             }
 
             // Update tray foods
@@ -153,14 +159,18 @@ export function useGameSession() {
     }, [addScore, addMessage, gameConfig?.scorePerFeed, gameConfig?.scorePenalty]);
 
 
+    // Game over when no lives left
+    const gameOver = lives <= 0;
+
     return {
         timeLeft,
         lives,
-        score,
+        score: Math.max(0, score), // Ensure score never goes below 0
         trayFoods,
         activeAnimals,
         handleFeed,
         messages,
-        addMessage
+        addMessage,
+        gameOver
     };
 }

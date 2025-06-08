@@ -18,5 +18,5 @@ export function useScore(initialScore = 0) {
         [initialScore]
     );
 
-    return [score, addScore, resetScore];
+    return [score, addScore, setScore, resetScore];
 }

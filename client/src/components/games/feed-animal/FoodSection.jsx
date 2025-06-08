@@ -1,17 +1,22 @@
 import React from 'react';
 import FoodCard from './FoodCard.jsx';
 
-
-const FoodSection = ({foods = []}) => {
+const FoodSection = ({ foods = [] }) => {
     return (
-        <div className="flex space-x-8 p-4 rounded-md">
-            {foods.map(food => (
-                <FoodCard
-                    key={food.id}
-                    food={food}
-
-                />
-            ))}
+        <div className="w-full">
+            {foods.length > 0 ? (
+                <div className="grid grid-cols-1 gap-3 p-2">
+                    {foods.map(food => (
+                        <div key={food.id} className="w-full hover:bg-gray-50 rounded-lg transition-colors">
+                            <FoodCard food={food} />
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center text-gray-500 py-8">
+                    No food items available
+                </div>
+            )}
         </div>
     );
 };

@@ -10,7 +10,6 @@ function AnimalCard({animal, onFeed}) {
     const handleDrop = e => {
         e.preventDefault();
         const foodId = Number(e.dataTransfer.getData('foodId'));
-        console.log('Dropped foodId:', foodId);
         if (onFeed) {
             onFeed(animal.id, foodId);
         }
