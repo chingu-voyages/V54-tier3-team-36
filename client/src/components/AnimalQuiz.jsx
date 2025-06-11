@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import quizData from "../data/quizData.json";
+import { useAuth } from '../context/auth'
+import { useNavigate } from "react-router";
 
 const AnimalQuiz = () => {
+  const { user } = useAuth();
+  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+  const localApiUrl = 'http://localhost:5000'
+
+  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl : localApiUrl
+
+  const navigate = useNavigate()
+
   const [level, setLevel] = useState(1);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [totalScore, setTotalScore] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [progress, setProgress] = useState(0);
@@ -17,6 +28,7 @@ const AnimalQuiz = () => {
     setSelectedAnswer(selected);
     if (selected === correct) {
       setScore(score + 1);
+      setTotalScore(totalScore + 1)
     }
     setShowAnswer(true);
   };
@@ -35,6 +47,7 @@ const AnimalQuiz = () => {
   };
 
   const handleRetryQuiz = () => {
+    setTotalScore(totalScore - score)
     setCurrentQuestionIndex(0);
     setScore(0);
     setShowAnswer(false);
@@ -55,6 +68,28 @@ const AnimalQuiz = () => {
       setQuizCompleted(false);
     }
   };
+
+  const handleResult = async () => {
+    const data = {
+      userId: user._id,
+      gameName: "quizzes",
+      score: totalScore,
+      win: true
+    }
+    try {
+      const res = await fetch(`${backendUrl}/api/games/result`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      console.log(result)
+      navigate("/")
+    } catch (error) {
+      console.error("Error saving result", error)
+    }
+
+  }
 
   return (
     <div className="flex flex-col w-full max-w-7xl px-2 sm:px-8 pt-10 pb-20 bg-teal-900 rounded-3xl shadow-lg">
@@ -97,7 +132,17 @@ const AnimalQuiz = () => {
               </button>
             )}
             {level === quizData.length && (
-              <p className="text-teal-300 mt-2 font-semibold">You finished all quizzes!</p>
+              <>
+                <p className="text-teal-300 mt-2 font-semibold">You finished all quizzes! Total Score: {totalScore}</p>
+                {user && 
+                  <button 
+                    onClick={handleResult} 
+                    className="px-4 py-2 bg-teal-700 shadow-lg shadow-teal-500/50 border-none rounded-md text-white hover:bg-teal-600"
+                  >
+                    Save your result
+                  </button>
+                }
+              </>
             )}
           </div>
         </div>
