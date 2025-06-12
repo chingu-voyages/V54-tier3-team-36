@@ -20,7 +20,7 @@ const GameOverScreen = ({reason, score, onRestart}) => (
 
             <button
                 onClick={onRestart}
-                className="w-full max-w-xs px-6 py-3 bg-blue-600 text-white rounded-lg 
+                className="w-full max-w-xs px-6 py-3 bg-blue-600 text-white rounded-lg
                            hover:bg-blue-700 transition-all font-semibold text-lg
                            transform hover:scale-105 active:scale-95 shadow-lg"
             >
@@ -38,6 +38,7 @@ export default function GameSessionUI({onRestart}) {
         trayFoods,
         activeAnimals,
         handleFeed,
+        shuffleTrayFoods,
         messages,
         addMessage,
         gameOver,
@@ -102,8 +103,17 @@ export default function GameSessionUI({onRestart}) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Food Tray Column */}
                         <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-                            <div className="bg-blue-50 px-4 py-3 border-b">
+                            {/*<div className="bg-blue-50 px-4 py-3 border-b">*/}
+                            {/*    <h2 className="text-lg font-semibold text-gray-800 text-center">Food Tray</h2>*/}
+                            {/*</div>*/}
+                            <div className="bg-blue-50 px-4 py-3 border-b flex justify-between items-center">
                                 <h2 className="text-lg font-semibold text-gray-800">Food Tray</h2>
+                                <button
+                                    onClick={shuffleTrayFoods}
+                                    className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded transition-colors duration-200 flex items-center gap-1"
+                                >
+                                    Shuffle Foods
+                                </button>
                             </div>
                             <div className="flex-1 overflow-y-auto">
                                 <FoodSection foods={trayFoods}/>
@@ -113,7 +123,7 @@ export default function GameSessionUI({onRestart}) {
                         {/* Hungry Animals Column */}
                         <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
                             <div className="bg-green-50 px-4 py-3 border-b">
-                                <h2 className="text-lg font-semibold text-gray-800">Hungry Animals</h2>
+                                <h2 className="text-lg font-semibold text-gray-800 text-center">Hungry Animals</h2>
                             </div>
                             <div className="flex-1 overflow-y-auto">
                                 <AnimalSection animals={activeAnimals} onFeed={handleFeed}/>
@@ -123,7 +133,7 @@ export default function GameSessionUI({onRestart}) {
                         {/* Game Log Column */}
                         <div className="bg-white rounded-lg shadow-md overflow-hidden">
                             <div className="bg-purple-50 px-4 py-3 border-b">
-                                <h2 className="text-lg font-semibold text-gray-800">Game Log</h2>
+                                <h2 className="text-lg font-semibold text-gray-800 text-center">Game Chat</h2>
                             </div>
                             <div className="p-4 h-[300px] overflow-y-auto">
                                 <StatsModal messages={messages}/>

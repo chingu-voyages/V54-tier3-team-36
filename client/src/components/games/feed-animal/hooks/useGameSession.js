@@ -58,6 +58,18 @@ export function useGameSession() {
         }
     });
 
+    const shuffleTrayFoods = useCallback(() => {
+        try {
+            const allFoods = gameData?.foods || [];
+            const shuffled = shuffleCards([...allFoods]);
+            const newTrayFoods = shuffled.slice(0, Math.min(gameConfig.foodOptionCount, allFoods.length));
+            setTrayFoods(newTrayFoods);
+            addMessage('🔀 Food tray shuffled!');
+        } catch (error) {
+            console.error('Error shuffling tray foods:', error);
+        }
+    }, [gameConfig.foodOptionCount]);
+
     const [activeAnimals, setActiveAnimals] = useState(() => {
         try {
             const animals = Array.isArray(gameData?.animals) ? [...gameData.animals] : [];
@@ -96,15 +108,6 @@ export function useGameSession() {
         setMessages([welcomeMessage]);
         return () => setMessages([]);
     }, []);
-
-    // useEffect(() => {
-    //     console.log('[Game Session] Auth Debug:', {
-    //         userFromHook: user,
-    //         userFromContext: authContextUser,
-    //         currentUser: currentUser,
-    //         hasToken: !!sessionStorage.getItem('token')
-    //     });
-    // }, [user, authContextUser, currentUser]);
 
     const handleFeed = useCallback((animalId, foodId) => {
         try {
@@ -243,6 +246,7 @@ export function useGameSession() {
         trayFoods,
         activeAnimals,
         handleFeed,
+        shuffleTrayFoods,
         messages,
         addMessage,
         gameOver: gameOver.isOver,

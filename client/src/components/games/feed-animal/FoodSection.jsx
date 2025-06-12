@@ -5,7 +5,7 @@ const FoodSection = ({foods = []}) => {
     return (
         <div className="w-full">
             {foods.length > 0 ? (
-                <div className="grid grid-cols-1 gap-3 p-2">
+                <div className="grid grid-cols-2 gap-3 p-2">
                     {foods.map(food => (
                         <div key={food.id} className="w-full ">
                             <FoodCard food={food}/>

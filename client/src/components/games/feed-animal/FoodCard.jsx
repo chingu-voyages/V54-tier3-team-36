@@ -17,7 +17,7 @@ const FoodCard = ({food}) => {
                     e.dataTransfer.setData('foodId', food.id);
                     e.dataTransfer.effectAllowed = 'move';
                 }}
-                className="w-24 h-24 rounded-md shadow-md cursor-grab
+                className="w-32 h-32 rounded-md shadow-md cursor-grab
                           hover:scale-110 hover:shadow-xl transition-transform duration-200
                           !bg-transparent hover:!bg-transparent"
             />
