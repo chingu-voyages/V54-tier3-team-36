@@ -8,8 +8,6 @@ const router = express.Router();
 // Save game result - USE AUTH MIDDLEWARE HERE
 router.post('/save', auth, async (req, res) => {
     try {
-        console.log('[Game Route] Request body:', req.body);
-        console.log('[Game Route] User from token:', req.user);
 
         const userData = req.user.user || req.user;
 
@@ -63,7 +61,7 @@ router.post('/save', auth, async (req, res) => {
 // Get game history - USE AUTH MIDDLEWARE HERE TOO
 router.get('/history', auth, async (req, res) => {
     try {
-        console.log('[Game Route] Loading history for user:', req.user._id);
+
 
         const userId = req.user._id.toString();
 
