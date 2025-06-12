@@ -1,6 +1,6 @@
 {
   "gameConfig": {
-    "durationMs": 30000,
+    "durationMs": 60000,
     "spawnInterval": 5000,
     "animalsPerSpawn": 2,
     "foodOptionCount":  4,
