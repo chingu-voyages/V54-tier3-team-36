@@ -1,6 +1,6 @@
 {
   "gameConfig": {
-    "durationMs": 60000,
+    "durationMs": 30000,
     "spawnInterval": 5000,
     "animalsPerSpawn": 2,
     "foodOptionCount":  4,
@@ -8,66 +8,228 @@
     "scorePerFeed": 100,
     "scorePenalty": 50
   },
-  "foods": [
+  "animals": [
     {
       "id": 1,
-      "name": "Carrot",
-      "image": "food.png"
+      "name": "Rabbit",
+      "image": "rabbit.png",
+      "wantedFoodIds": [1, 2, 3]
     },
     {
       "id": 2,
-      "name": "Fish",
-      "image": "food1.png"
+      "name": "Giant Panda",
+      "image": "panda.png",
+      "wantedFoodIds": [4, 5, 6]
     },
     {
       "id": 3,
-      "name": "Cheese",
-      "image": "food2.png"
+      "name": "Lion",
+      "image": "lion.png",
+      "wantedFoodIds": [7, 8, 9]
     },
     {
       "id": 4,
-      "name": "Honey",
-      "image": "food3.png"
+      "name": "Brown Bear",
+      "image": "bear.png",
+      "wantedFoodIds": [10, 11, 12]
     },
     {
       "id": 5,
-      "name": "Berries",
-      "image": "food4.png"
+      "name": "Giraffe",
+      "image": "giraffe.png",
+      "wantedFoodIds": [13, 14, 15]
+    },
+    {
+      "id": 6,
+      "name": "Emperor Penguin",
+      "image": "penguin.png",
+      "wantedFoodIds": [16, 17, 18]
+    },
+    {
+      "id": 7,
+      "name": "Capuchin Monkey",
+      "image": "monkey.png",
+      "wantedFoodIds": [19, 20, 21]
+    },
+    {
+      "id": 8,
+      "name": "Koala",
+      "image": "koala.png",
+      "wantedFoodIds": [22, 23, 24]
+    },
+    {
+      "id": 9,
+      "name": "Dolphin",
+      "image": "dolphin.png",
+      "wantedFoodIds": [17, 25, 26]
+    },
+    {
+      "id": 10,
+      "name": "Elephant",
+      "image": "elephant.png",
+      "wantedFoodIds": [27, 14, 28]
     }
   ],
-  "animals": [
+  "foods": [
     {
-      "id": 101,
-      "name": "Rabbit",
-      "image": "food.png",
-      "wantedFoodIds": [
-        1
-      ]
+      "id": 1,
+      "name": "Timothy Hay",
+      "image": "timothy_hay.png"
     },
     {
-      "id": 102,
-      "name": "Cat",
-      "image": "food1.png",
-      "wantedFoodIds": [
-        2
-      ]
+      "id": 2,
+      "name": "Leafy Greens",
+      "image": "leafy_greens.png"
     },
     {
-      "id": 103,
-      "name": "Bear",
-      "image": "food2.png",
-      "wantedFoodIds": [
-        2,
-        4
-      ]
+      "id": 3,
+      "name": "Carrot Tops",
+      "image": "carrot_tops.png"
     },
     {
-      "id": 104,
-      "name": "Mouse",
-      "image": "food3.png",
-      "wantedFoodIds": [
-        3
-      ]
+      "id": 4,
+      "name": "Bamboo",
+      "image": "bamboo.png"
+    },
+    {
+      "id": 5,
+      "name": "Bamboo Shoots",
+      "image": "bamboo_shoots.png"
+    },
+    {
+      "id": 6,
+      "name": "Apple Slices",
+      "image": "apple_slices.png"
+    },
+    {
+      "id": 7,
+      "name": "Raw Meat",
+      "image": "raw_meat.png"
+    },
+    {
+      "id": 8,
+      "name": "Whole Fish",
+      "image": "whole_fish.png"
+    },
+    {
+      "id": 9,
+      "name": "Bone Marrow",
+      "image": "bone_marrow.png"
+    },
+    {
+      "id": 10,
+      "name": "Salmon",
+      "image": "salmon.png"
+    },
+    {
+      "id": 11,
+      "name": "Wild Berries",
+      "image": "berries.png"
+    },
+    {
+      "id": 12,
+      "name": "Honey",
+      "image": "honey.png"
+    },
+    {
+      "id": 13,
+      "name": "Acacia Leaves",
+      "image": "acacia_leaves.png"
+    },
+    {
+      "id": 14,
+      "name": "Tree Bark",
+      "image": "tree_bark.png"
+    },
+    {
+      "id": 15,
+      "name": "Thorny Branches",
+      "image": "thorny_branches.png"
+    },
+    {
+      "id": 16,
+      "name": "Krill",
+      "image": "krill.png"
+    },
+    {
+      "id": 17,
+      "name": "Small Fish",
+      "image": "small_fish.png"
+    },
+    {
+      "id": 18,
+      "name": "Squid",
+      "image": "squid.png"
+    },
+    {
+      "id": 19,
+      "name": "Tropical Fruits",
+      "image": "tropical_fruits.png"
+    },
+    {
+      "id": 20,
+      "name": "Insects",
+      "image": "insects.png"
+    },
+    {
+      "id": 21,
+      "name": "Tree Nuts",
+      "image": "tree_nuts.png"
+    },
+    {
+      "id": 22,
+      "name": "Eucalyptus Leaves",
+      "image": "eucalyptus_leaves.png"
+    },
+    {
+      "id": 23,
+      "name": "Eucalyptus Buds",
+      "image": "eucalyptus_buds.png"
+    },
+    {
+      "id": 24,
+      "name": "Eucalyptus Bark",
+      "image": "eucalyptus_bark.png"
+    },
+    {
+      "id": 25,
+      "name": "Shrimp",
+      "image": "shrimp.png"
+    },
+    {
+      "id": 26,
+      "name": "Octopus",
+      "image": "octopus.png"
+    },
+    {
+      "id": 27,
+      "name": "Grass",
+      "image": "grass.png"
+    },
+    {
+      "id": 28,
+      "name": "Mixed Fruits",
+      "image": "mixed_fruits.png"
+    },
+    {
+      "id": 29,
+      "name": "Pizza",
+      "image": "pizza.png"
+    },
+    {
+      "id": 30,
+      "name": "Chocolate",
+      "image": "chocolate.png"
+    },
+    {
+      "id": 31,
+      "name": "Bread",
+      "image": "bread.png"
+    },
+    {
+      "id": 32,
+      "name": "Ice Cream",
+      "image": "ice_cream.png"
     }
   ]
 }

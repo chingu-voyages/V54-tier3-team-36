@@ -22,7 +22,9 @@ function AnimalCard({animal, onFeed}) {
             <img
                 src={src}
                 alt={animal.name}
-                className="w-32 h-34 object-contain"
+                className="w-24 h-24 rounded-md shadow-md cursor-grab
+                          hover:scale-110 hover:shadow-xl transition-transform duration-200
+                          !bg-transparent hover:!bg-transparent"
             />
             <div className="mt-2 text-sm font-medium">{animal.name}</div>
         </div>

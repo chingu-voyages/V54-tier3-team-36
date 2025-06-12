@@ -7,7 +7,7 @@ function AnimalSection({animals, onFeed}) {
             {animals.length > 0 ? (
                 <div className="grid grid-cols-1 gap-3 p-2">
                     {animals.map(a => (
-                        <div key={a.id} className="w-full hover:bg-gray-50 rounded-lg transition-colors">
+                        <div key={a.id} className="w-full ">
                             <AnimalCard key={a.id} animal={a} onFeed={onFeed}/>
                         </div>
                     ))}
