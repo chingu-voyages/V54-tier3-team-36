@@ -10,10 +10,9 @@ import {AuthContext, useAuth} from '@/context/auth';
 
 
 const MAX_MESSAGES = 5;
+
 export function useGameSession() {
-
-    const [gameOver, setGameOver] = useState({ isOver: false, reason: '' });
-
+    const [gameOver, setGameOver] = useState({isOver: false, reason: ''});
     const gameConfig = useMemo(() => ({
         durationMs: gameData.gameConfig.durationMs,
         startingLives: gameData.gameConfig.startingLives,
@@ -27,12 +26,10 @@ export function useGameSession() {
         return uuidv4();
     }, []);
 
-
     const [sessionSaved, setSessionSaved] = useState(false);
 
     const sessionStartTime = useMemo(() => Date.now(), []);
 
-    // Game state hooks
     const timeLeft = useGameTimer(gameConfig.durationMs);
     const [lives, loseLife] = useLives(gameConfig.startingLives);
     const [score, addScore] = useScore(0);
@@ -45,7 +42,7 @@ export function useGameSession() {
 
     const messagesRef = useRef(messages);
     messagesRef.current = messages;
-    const { user } = useAuth();
+    const {user} = useAuth();
     const authContextUser = useContext(AuthContext)?.user;
     const currentUser = user || authContextUser;
 
@@ -60,7 +57,7 @@ export function useGameSession() {
             return [];
         }
     });
-    
+
     const [activeAnimals, setActiveAnimals] = useState(() => {
         try {
             const animals = Array.isArray(gameData?.animals) ? [...gameData.animals] : [];
@@ -71,26 +68,24 @@ export function useGameSession() {
             return [];
         }
     });
-    
+
 
     const addMessage = useCallback((text) => {
-        if (!text) return; // Skip empty messages
-        
+        if (!text) return;
         const newMessage = {
             id: uuidv4(),
             text,
             timestamp: new Date().toLocaleTimeString()
         };
-        
+
         setMessages(prevMessages => {
             const filtered = prevMessages.filter(msg => msg.id !== 'welcome');
 
             const updated = [newMessage, ...filtered];
-
             return updated.slice(0, MAX_MESSAGES);
         });
     }, []);
-    
+
 
     useEffect(() => {
         const welcomeMessage = {
@@ -99,19 +94,17 @@ export function useGameSession() {
             timestamp: new Date().toLocaleTimeString()
         };
         setMessages([welcomeMessage]);
-        
-
         return () => setMessages([]);
     }, []);
 
-    useEffect(() => {
-        console.log('[Game Session] Auth Debug:', {
-            userFromHook: user,
-            userFromContext: authContextUser,
-            currentUser: currentUser,
-            hasToken: !!sessionStorage.getItem('token')
-        });
-    }, [user, authContextUser, currentUser]);
+    // useEffect(() => {
+    //     console.log('[Game Session] Auth Debug:', {
+    //         userFromHook: user,
+    //         userFromContext: authContextUser,
+    //         currentUser: currentUser,
+    //         hasToken: !!sessionStorage.getItem('token')
+    //     });
+    // }, [user, authContextUser, currentUser]);
 
     const handleFeed = useCallback((animalId, foodId) => {
         try {
@@ -121,7 +114,7 @@ export function useGameSession() {
 
             const animal = gameData?.animals?.find(a => a?.id === animalId);
             const food = gameData?.foods?.find(f => f?.id === foodId);
-            
+
             if (!animal || !food) {
                 return;
             }
@@ -156,9 +149,9 @@ export function useGameSession() {
                     const filtered = (prevTrayFoods || []).filter(f => f?.id !== foodId);
                     const usedFoodIds = new Set(filtered.map(f => f?.id).filter(Boolean));
                     const candidates = (gameData?.foods || []).filter(f => f?.id && !usedFoodIds.has(f.id));
-                    
+
                     if (!candidates?.length) return filtered || [];
-                    
+
                     const shuffled = shuffleCards([...candidates]);
                     const nextFood = shuffled[0];
                     return nextFood ? [...filtered, nextFood] : filtered;
@@ -173,9 +166,9 @@ export function useGameSession() {
                     const filtered = (prevActiveAnimals || []).filter(a => a?.id !== animalId);
                     const usedAnimalIds = new Set(filtered.map(a => a?.id).filter(Boolean));
                     const candidates = (gameData?.animals || []).filter(a => a?.id && !usedAnimalIds.has(a.id));
-                    
+
                     if (!candidates?.length) return filtered || [];
-                    
+
                     const shuffled = shuffleCards([...candidates]);
                     const nextAnimal = shuffled[0];
                     return nextAnimal ? [...filtered, nextAnimal] : filtered;
@@ -196,7 +189,7 @@ export function useGameSession() {
             console.log('User not logged in, skipping save');
             return;
         }
-        
+
         const gameData = {
             sessionId,
             score,
@@ -208,22 +201,19 @@ export function useGameSession() {
         };
 
 
-        
         try {
 
             const result = await saveGameResult(gameData);
-            console.log('[Game Save] Game saved successfully:', result);
             return result;
         } catch (error) {
-            console.error('[Game Save] Failed to save game result:', error);
             if (error.response) {
-                console.error('[Game Save] Error response data:', error.response.data);
-                console.error('[Game Save] Error status:', error.response.status);
-                console.error('[Game Save] Error headers:', error.response.headers);
+                console.error('Error response data:', error.response.data);
+                console.error('Error status:', error.response.status);
+                console.error('Error headers:', error.response.headers);
             } else if (error.request) {
-                console.error('[Game Save] No response received:', error.request);
+                console.error('No response received:', error.request);
             } else {
-                console.error('[Game Save] Request setup error:', error.message);
+                console.error('Request setup error:', error.message);
             }
             throw error;
         }
@@ -233,12 +223,12 @@ export function useGameSession() {
     useEffect(() => {
         if (lives <= 0 && !gameOver.isOver) {
             const reason = 'no_lives';
-            setGameOver({ isOver: true, reason: 'You ran out of lives!' });
+            setGameOver({isOver: true, reason: 'You ran out of lives!'});
             addMessage('Game Over! You ran out of lives!');
             saveResults(reason);
         } else if (timeLeft <= 0 && !gameOver.isOver) {
             const reason = 'time_up';
-            setGameOver({ isOver: true, reason: 'Time is up!' });
+            setGameOver({isOver: true, reason: 'Time is up!'});
             addMessage('Game Over! Time is up!');
             saveResults(reason);
         }

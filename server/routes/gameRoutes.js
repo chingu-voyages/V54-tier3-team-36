@@ -1,18 +1,15 @@
-// server/routes/gameRoutes.js
 import express from "express";
 import FeedTheAnimal from "../models/FeedTheAnimal.js";
 import auth from "../middleware/auth-middleware.js";
 
 const router = express.Router();
 
-// Save game result - USE AUTH MIDDLEWARE HERE
 router.post('/save', auth, async (req, res) => {
     try {
 
         const userData = req.user.user || req.user;
 
         if (!userData || !userData._id) {
-            console.error('[Game Route] No user found in token');
             return res.status(401).json({
                 success: false,
                 error: 'Invalid user token'
@@ -36,11 +33,8 @@ router.post('/save', auth, async (req, res) => {
             savedAt: req.body.savedAt || new Date().toISOString()
         };
 
-
         const gameResult = new FeedTheAnimal(gameData);
         const savedResult = await gameResult.save();
-
-
 
         res.status(201).json({
             success: true,
@@ -49,7 +43,7 @@ router.post('/save', auth, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('[Game Route] Error saving game:', error);
+        console.error('Error saving game:', error);
         res.status(500).json({
             success: false,
             error: 'Failed to save game result',
@@ -61,8 +55,6 @@ router.post('/save', auth, async (req, res) => {
 // Get game history - USE AUTH MIDDLEWARE HERE TOO
 router.get('/history', auth, async (req, res) => {
     try {
-
-
         const userId = req.user._id.toString();
 
         const games = await FeedTheAnimal.find({userId})
