@@ -19,9 +19,9 @@ export default function GameStartScreen({ gameName, gameDescription, onStart }) 
         <h1 className="text-5xl font-extrabold mb-6 text-white drop-shadow-lg text-center">
           {gameName}
         </h1>
-        <p className="text-lg mb-8 max-w-xl text-center text-white font-medium drop-shadow-md">
-          {gameDescription}
-        </p>
+          <p className="text-lg mb-8 max-w-xl text-center text-white font-medium drop-shadow-md bg-black bg-opacity-60 px-4 py-2 rounded-lg whitespace-pre-line">
+              {gameDescription}
+          </p>
         <p className="text-xl mb-8 font-semibold text-white drop-shadow">
           Are you ready to start?
         </p>

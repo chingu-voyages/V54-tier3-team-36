@@ -4,7 +4,10 @@ import GameStartScreen from "@/components/games/feed-animal/GameStartScreen.jsx"
 
 
 const GAME_NAME = "Hungry Paws!";
-const GAME_DESCRIPTION = "Feed the right food to each animal before time runs out! Each animal wants a specific food. Get it right to score points, but be careful—wrong answers cost you points and lives. Can you get the highest score before time or lives run out?";
+const GAME_DESCRIPTION = `Feed the right food to each animal before time runs out!
+Each animal wants a specific food.
+Get it right to score points, but be careful - wrong answers cost you POINTS and LIVES.
+Can you get the highest score before time or lives run out?`;
 
 const GameContainer = () => {
     const [sessionKey, setSessionKey] = useState(0);
