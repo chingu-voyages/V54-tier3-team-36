@@ -1,20 +1,19 @@
-import {useCallback, useState, useMemo, useRef, useEffect, useContext} from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import {useCallback, useContext, useEffect, useMemo, useRef, useState} from 'react';
+import {v4 as uuidv4} from 'uuid';
 import gameData from '../../data/game-data.json';
-import { useGameTimer } from './useGameTimer';
-import { useLives } from './useLives';
-import { useScore } from './useScore';
-import { shuffleCards } from "@/components/games/feed-animal/helpers/shuffleCards";
-import { saveGameResult } from '@/services/gameService';
-import { AuthContext } from '@/context/auth';
+import {useGameTimer} from './useGameTimer';
+import {useLives} from './useLives';
+import {useScore} from './useScore';
+import {shuffleCards} from "@/components/games/feed-animal/helpers/shuffleCards";
+import {saveGameResult} from '@/services/gameService';
+import {AuthContext, useAuth} from '@/context/auth';
 
-// Maximum number of messages to keep in the log
+
 const MAX_MESSAGES = 5;
 export function useGameSession() {
-    // Game over state
+
     const [gameOver, setGameOver] = useState({ isOver: false, reason: '' });
-    
-    // Destructure game configuration
+
     const gameConfig = useMemo(() => ({
         durationMs: gameData.gameConfig.durationMs,
         startingLives: gameData.gameConfig.startingLives,
@@ -24,6 +23,15 @@ export function useGameSession() {
         scorePenalty: gameData.gameConfig.scorePenalty
     }), []);
 
+    const sessionId = useMemo(() => {
+        return uuidv4();
+    }, []);
+
+
+    const [sessionSaved, setSessionSaved] = useState(false);
+
+    const sessionStartTime = useMemo(() => Date.now(), []);
+
     // Game state hooks
     const timeLeft = useGameTimer(gameConfig.durationMs);
     const [lives, loseLife] = useLives(gameConfig.startingLives);
@@ -32,11 +40,14 @@ export function useGameSession() {
     const [stats, setStats] = useState({
         correctFeeds: 0,
         incorrectFeeds: 0,
-        gameStartTime: Date.now()
+        gameStartTime: sessionStartTime
     });
+
     const messagesRef = useRef(messages);
     messagesRef.current = messages;
-    const { user } = useContext(AuthContext);
+    const { user } = useAuth();
+    const authContextUser = useContext(AuthContext)?.user;
+    const currentUser = user || authContextUser;
 
     // Initialize tray foods and active animals with error handling
     const [trayFoods, setTrayFoods] = useState(() => {
@@ -61,7 +72,7 @@ export function useGameSession() {
         }
     });
     
-    // Add message to log (newest first)
+
     const addMessage = useCallback((text) => {
         if (!text) return; // Skip empty messages
         
@@ -72,16 +83,15 @@ export function useGameSession() {
         };
         
         setMessages(prevMessages => {
-            // Keep all messages except the welcome message
             const filtered = prevMessages.filter(msg => msg.id !== 'welcome');
-            // Add new message at the beginning of the array
+
             const updated = [newMessage, ...filtered];
-            // Keep only the last MAX_MESSAGES messages
+
             return updated.slice(0, MAX_MESSAGES);
         });
     }, []);
     
-    // Add welcome message on first render only
+
     useEffect(() => {
         const welcomeMessage = {
             id: 'welcome',
@@ -90,9 +100,18 @@ export function useGameSession() {
         };
         setMessages([welcomeMessage]);
         
-        // Cleanup function to clear messages on unmount
+
         return () => setMessages([]);
     }, []);
+
+    useEffect(() => {
+        console.log('[Game Session] Auth Debug:', {
+            userFromHook: user,
+            userFromContext: authContextUser,
+            currentUser: currentUser,
+            hasToken: !!sessionStorage.getItem('token')
+        });
+    }, [user, authContextUser, currentUser]);
 
     const handleFeed = useCallback((animalId, foodId) => {
         try {
@@ -100,7 +119,6 @@ export function useGameSession() {
                 return;
             }
 
-            // Safely find the animal and food objects
             const animal = gameData?.animals?.find(a => a?.id === animalId);
             const food = gameData?.foods?.find(f => f?.id === foodId);
             
@@ -111,8 +129,7 @@ export function useGameSession() {
             const isCorrect = animal?.wantedFoodIds?.includes?.(foodId) ?? false;
             const points = isCorrect ? (gameConfig?.scorePerFeed ?? 100) : -(gameConfig?.scorePenalty ?? 50);
             const newScore = score + points;
-            
-            // Update the score
+
             addScore(points);
 
             if (isCorrect) {
@@ -128,14 +145,12 @@ export function useGameSession() {
                     incorrectFeeds: prev.incorrectFeeds + 1
                 }));
 
-                // Only lose a life if the NEW TOTAL score is less than 0
                 if (newScore < 0 && lives > 0) {
                     loseLife(1);
                     addMessage('💔 Lost a life! Score went negative!');
                 }
             }
 
-            // Update tray foods
             setTrayFoods(prevTrayFoods => {
                 try {
                     const filtered = (prevTrayFoods || []).filter(f => f?.id !== foodId);
@@ -153,7 +168,6 @@ export function useGameSession() {
                 }
             });
 
-            // Update active animals
             setActiveAnimals(prevActiveAnimals => {
                 try {
                     const filtered = (prevActiveAnimals || []).filter(a => a?.id !== animalId);
@@ -179,11 +193,12 @@ export function useGameSession() {
     // Save game results
     const saveResults = useCallback(async (reason) => {
         if (!user) {
-            console.log('[Game Save] User not logged in, skipping save');
+            console.log('User not logged in, skipping save');
             return;
         }
         
         const gameData = {
+            sessionId,
             score,
             livesLeft: lives,
             timePlayed: gameConfig.durationMs - timeLeft,
@@ -192,10 +207,10 @@ export function useGameSession() {
             gameOverReason: reason
         };
 
-        console.log('[Game Save] Attempting to save game data:', JSON.stringify(gameData, null, 2));
+
         
         try {
-            console.log('[Game Save] Calling saveGameResult...');
+
             const result = await saveGameResult(gameData);
             console.log('[Game Save] Game saved successfully:', result);
             return result;
@@ -230,6 +245,8 @@ export function useGameSession() {
     }, [lives, timeLeft, gameOver.isOver, addMessage, saveResults]);
 
     return {
+        sessionId,
+        sessionSaved,
         timeLeft,
         lives,
         score,
