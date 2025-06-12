@@ -6,8 +6,28 @@ const feedTheAnimalSchema = new mongoose.Schema({
     required: true,
     index: true
   },
+
+  playerName: {
+    type: String,
+    required: false
+  },
+
+
+  gameType: {
+    type: String,
+    default: 'feed-animal',
+    required: false
+  },
   
-  // Game data
+
+  sessionId: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true
+  },
+  
+
   score: { 
     type: Number, 
     required: true 
@@ -16,7 +36,7 @@ const feedTheAnimalSchema = new mongoose.Schema({
     type: Number, 
     required: true 
   },
-  timePlayed: {  // in milliseconds
+  timePlayed: {
     type: Number, 
     required: true 
   },
@@ -37,7 +57,7 @@ const feedTheAnimalSchema = new mongoose.Schema({
   timestamps: true 
 });
 
-// Index for high scores
+
 feedTheAnimalSchema.index({ score: -1 });
 
 const FeedTheAnimal = mongoose.model('FeedTheAnimal', feedTheAnimalSchema);

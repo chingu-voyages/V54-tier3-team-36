@@ -1,82 +1,116 @@
+// server/routes/gameRoutes.js
 import express from "express";
 import FeedTheAnimal from "../models/FeedTheAnimal.js";
+import auth from "../middleware/auth-middleware.js";
 
 const router = express.Router();
 
-// Save game result
-router.post('/feed-the-animal', async (req, res) => {
+// Save game result - USE AUTH MIDDLEWARE HERE
+router.post('/save', auth, async (req, res) => {
     try {
-        console.log('Request body:', req.body);
-        
+        console.log('[Game Route] Request body:', req.body);
+        console.log('[Game Route] User from token:', req.user);
+
+        const userData = req.user.user || req.user;
+
+        if (!userData || !userData._id) {
+            console.error('[Game Route] No user found in token');
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid user token'
+            });
+        }
+
+        const userId = userData._id;
+        const playerName = userData.name;
+
         const gameData = {
-            userId: req.body.userId || 'test-user-id',
+            userId: userId.toString(),
+            playerName: playerName,
+            sessionId: req.body.sessionId,
+            gameType: req.body.gameType,
             score: req.body.score,
             livesLeft: req.body.livesLeft,
             timePlayed: req.body.timePlayed,
             correctFeeds: req.body.correctFeeds,
             incorrectFeeds: req.body.incorrectFeeds,
-            gameOverReason: req.body.gameOverReason
+            gameOverReason: req.body.gameOverReason,
+            savedAt: req.body.savedAt || new Date().toISOString()
         };
-        
-        console.log('Creating game result with data:', gameData);
-        
+
+
         const gameResult = new FeedTheAnimal(gameData);
         const savedResult = await gameResult.save();
-        
-        console.log('Game result saved successfully:', savedResult);
-        res.status(201).send(savedResult);
+
+
+
+        res.status(201).json({
+            success: true,
+            message: 'Game saved successfully',
+            data: savedResult
+        });
+
     } catch (error) {
-        console.error('Error saving game result:');
-        console.error('Error name:', error.name);
-        console.error('Error message:', error.message);
-        if (error.name === 'ValidationError') {
-            console.error('Validation errors:', error.errors);
-        }
-        console.error('Full error:', error);
-        res.status(500).send({
+        console.error('[Game Route] Error saving game:', error);
+        res.status(500).json({
+            success: false,
             error: 'Failed to save game result',
-            details: error.message,
-            name: error.name
+            details: error.message
         });
     }
 });
 
-// Get user's game history
-router.get('/feed-the-animal/history',  async (req, res) => {
+// Get game history - USE AUTH MIDDLEWARE HERE TOO
+router.get('/history', auth, async (req, res) => {
     try {
-        const games = await FeedTheAnimal.find({userId: req.user._id})
+        console.log('[Game Route] Loading history for user:', req.user._id);
+
+        const userId = req.user._id.toString();
+
+        const games = await FeedTheAnimal.find({userId})
             .sort({createdAt: -1})
             .limit(10);
-        res.send(games);
+
+        res.json({
+            success: true,
+            data: games
+        });
     } catch (error) {
-        res.status(500).send({error: 'Failed to fetch game history'});
+        console.error('[Game Route] Error fetching history:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch game history'
+        });
     }
 });
 
-// Get leaderboard
-// get('/feed-the-animal/leaderboard', async (req, res) => {
-//     try {
-//         const leaderboard = await FeedTheAnimal.aggregate([
-//             {$sort: {score: -1}},
-//             {$limit: 10},
-//             {
-//                 $lookup: {
-//                     from: 'users',
-//                     localField: 'userId',
-//                     foreignField: '_id',
-//                     as: 'user',
-//                     pipeline: [
-//                         {$project: {username: 1}}
-//                     ]
-//                 }
-//             },
-//             {$unwind: '$user'}
-//         ]);
-//         res.send(leaderboard);
-//     } catch (error) {
-//         console.error('Error fetching leaderboard:', error);
-//         res.status(500).send({error: 'Failed to fetch leaderboard'});
-//     }
-// });
+// Public leaderboard - NO AUTH NEEDED
+router.get('/leaderboard', async (req, res) => {
+    try {
+        const leaderboard = await FeedTheAnimal.aggregate([
+            {$sort: {score: -1}},
+            {$limit: 10},
+            {
+                $project: {
+                    score: 1,
+                    playerName: 1,
+                    createdAt: 1,
+                    gameType: 1
+                }
+            }
+        ]);
+
+        res.json({
+            success: true,
+            data: leaderboard
+        });
+    } catch (error) {
+        console.error('[Game Route] Error fetching leaderboard:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch leaderboard'
+        });
+    }
+});
 
 export default router;
