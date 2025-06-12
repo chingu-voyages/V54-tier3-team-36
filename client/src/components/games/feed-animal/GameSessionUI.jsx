@@ -91,24 +91,28 @@ export default function GameSessionUI({onRestart}) {
                                 <div className="text-lg font-bold">{lives}</div>
                             </div>
                         </div>
+                        <button
+                            onClick={onRestart}
+                            className="flex items-center bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg transition-colors duration-200"
+                        >
+                            <span className="text-gray-600 text-xl mr-2">🚪</span>
+                            <div>
+                                <div className="text-lg font-bold">Exit Game</div>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            {/* Three Column Layout */}
             <div className="flex-1 overflow-auto">
                 <div className="container mx-auto px-4">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Food Tray Column */}
                         <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-                            {/*<div className="bg-blue-50 px-4 py-3 border-b">*/}
-                            {/*    <h2 className="text-lg font-semibold text-gray-800 text-center">Food Tray</h2>*/}
-                            {/*</div>*/}
                             <div className="bg-blue-50 px-4 py-3 border-b flex justify-between items-center">
                                 <h2 className="text-lg font-semibold text-gray-800">Food Tray</h2>
                                 <button
                                     onClick={shuffleTrayFoods}
-                                    className="bg-green-500 hover:bg-green-600 text-white text-sm px-3 py-1 rounded transition-colors duration-200 flex items-center gap-1"
+                                    className="bg-green-500 hover:bg-green-600 text-black text-sm px-3 py-1 rounded transition-colors duration-200 flex items-center gap-1"
                                 >
                                     Shuffle Foods
                                 </button>
