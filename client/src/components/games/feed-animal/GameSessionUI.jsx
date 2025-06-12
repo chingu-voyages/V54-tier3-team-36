@@ -1,26 +1,23 @@
-import React, { useEffect } from 'react';
-import Timer from './Timer.jsx';
-import Score from './Score.jsx';
-import Lives from './Lives.jsx';
+import React, {useEffect} from 'react';
 import FoodSection from './FoodSection.jsx';
 import AnimalSection from './AnimalSection.jsx';
 import StatsModal from './StatsModal.jsx';
-import { useGameSession } from './hooks/useGameSession.js';
+import {useGameSession} from './hooks/useGameSession.js';
 
 // Game Over Screen Component
-const GameOverScreen = ({ reason, score, onRestart }) => (
+const GameOverScreen = ({reason, score, onRestart}) => (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4 text-center animate-fade-in">
             <div className="mb-6">
                 <h2 className="text-3xl font-bold text-red-600 mb-2">Game Over!</h2>
                 <p className="text-lg text-gray-700">{reason}</p>
             </div>
-            
+
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
                 <p className="text-4xl font-bold text-blue-600">{score}</p>
                 <p className="text-sm text-gray-500">Final Score</p>
             </div>
-            
+
             <button
                 onClick={onRestart}
                 className="w-full max-w-xs px-6 py-3 bg-blue-600 text-white rounded-lg 
@@ -59,7 +56,7 @@ export default function GameSessionUI({onRestart}) {
 
     if (isGameOver) {
         return (
-            <GameOverScreen 
+            <GameOverScreen
                 reason={gameOverReason || 'Game Over!'}
                 score={score}
                 onRestart={onRestart}
@@ -72,7 +69,7 @@ export default function GameSessionUI({onRestart}) {
             {/* Stats Row */}
             <div className="bg-white shadow-md p-4 mb-6">
                 <div className="container mx-auto">
-                    <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Feed the Animal</h1>
+                    <h1 className="text-2xl font-bold text-gray-800 mb-4 text-center">Hungry Paws</h1>
                     <div className="flex justify-center gap-8">
                         <div className="flex items-center bg-blue-50 px-4 py-2 rounded-lg">
                             <span className="text-blue-600 text-xl mr-2">⏱️</span>
@@ -109,7 +106,7 @@ export default function GameSessionUI({onRestart}) {
                                 <h2 className="text-lg font-semibold text-gray-800">Food Tray</h2>
                             </div>
                             <div className="flex-1 overflow-y-auto">
-                                <FoodSection foods={trayFoods} />
+                                <FoodSection foods={trayFoods}/>
                             </div>
                         </div>
 
@@ -119,7 +116,7 @@ export default function GameSessionUI({onRestart}) {
                                 <h2 className="text-lg font-semibold text-gray-800">Hungry Animals</h2>
                             </div>
                             <div className="flex-1 overflow-y-auto">
-                                <AnimalSection animals={activeAnimals} onFeed={handleFeed} />
+                                <AnimalSection animals={activeAnimals} onFeed={handleFeed}/>
                             </div>
                         </div>
 
@@ -129,7 +126,7 @@ export default function GameSessionUI({onRestart}) {
                                 <h2 className="text-lg font-semibold text-gray-800">Game Log</h2>
                             </div>
                             <div className="p-4 h-[300px] overflow-y-auto">
-                                <StatsModal messages={messages} />
+                                <StatsModal messages={messages}/>
                             </div>
                         </div>
                     </div>

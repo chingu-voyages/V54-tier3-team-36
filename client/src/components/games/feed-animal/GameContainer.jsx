@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import GameSessionUI from "@/components/games/feed-animal/GameSessionUI.jsx";
 import GameStartScreen from "@/components/games/feed-animal/GameStartScreen.jsx";
 
 
-const GAME_NAME = "Feed the Animal!";
+const GAME_NAME = "Hungry Paws!";
 const GAME_DESCRIPTION = "Feed the right food to each animal before time runs out! Each animal wants a specific food. Get it right to score points, but be careful—wrong answers cost you points and lives. Can you get the highest score before time or lives run out?";
 
 const GameContainer = () => {
