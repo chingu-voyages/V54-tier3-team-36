@@ -50,81 +50,80 @@ router.post('/save', auth, async (req, res) => {
         });
     }
 });
-//
-// router.get('/history', auth, async (req, res) => {
-//     try {
-//         const userData = req.user.user || req.user;
-//
-//         if (!userData || !userData._id) {
-//             return res.status(401).json({
-//                 success: false,
-//                 error: 'Invalid user token'
-//             });
-//         }
-//
-//         const userId = userData._id;
-//         const playerName = userData.name;
-//
-//         const games = await FeedTheAnimal.find({userId})
-//             .sort({createdAt: -1})
-//             .limit(10);
-//
-//         const totalGamesPlayed = await FeedTheAnimal.countDocuments({userId});
-//
-//         const bestScoreGame = await FeedTheAnimal.findOne({userId})
-//             .sort({score: -1})
-//             .limit(1);
-//
-//         // Get additional stats
-//         const stats = await FeedTheAnimal.aggregate([
-//             {
-//                 $match: { userId: userId }
-//             },
-//             {
-//                 $group: {
-//                     _id: null,
-//                     totalGames: { $sum: 1 },
-//                     bestScore: { $max: "$score" },
-//                     averageScore: { $avg: "$score" },
-//                     totalCorrectFeeds: { $sum: "$correctFeeds" },
-//                     totalIncorrectFeeds: { $sum: "$incorrectFeeds" },
-//                     longestTimePlayed: { $max: "$timePlayed" }
-//                 }
-//             }
-//         ]);
-//
-//         const gameStats = stats.length > 0 ? stats[0] : {
-//             totalGames: 0,
-//             bestScore: 0,
-//             averageScore: 0,
-//             totalCorrectFeeds: 0,
-//             totalIncorrectFeeds: 0,
-//             longestTimePlayed: 0
-//         };
-//
-//         res.json({
-//             success: true,
-//             data: {
-//                 recentGames: games,
-//                 statistics: {
-//                     totalGamesPlayed: totalGamesPlayed,
-//                     bestScore: gameStats.bestScore,
-//                     averageScore: Math.round(gameStats.averageScore * 100) / 100, // Round to 2 decimal places
-//                     totalCorrectFeeds: gameStats.totalCorrectFeeds,
-//                     totalIncorrectFeeds: gameStats.totalIncorrectFeeds,
-//                     longestTimePlayed: gameStats.longestTimePlayed,
-//                     bestGame: bestScoreGame
-//                 }
-//             }
-//         });
-//     } catch (error) {
-//         console.error('[Game Route] Error fetching history:', error);
-//         res.status(500).json({
-//             success: false,
-//             error: 'Failed to fetch game history'
-//         });
-//     }
-// });
+
+router.get('/history', auth, async (req, res) => {
+    try {
+        const userData = req.user.user || req.user;
+
+        if (!userData || !userData._id) {
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid user token'
+            });
+        }
+
+        const userId = userData._id;
+        const playerName = userData.name;
+
+        const games = await FeedTheAnimal.find({userId})
+            .sort({createdAt: -1})
+            .limit(10);
+
+        const totalGamesPlayed = await FeedTheAnimal.countDocuments({userId});
+
+        const bestScoreGame = await FeedTheAnimal.findOne({userId})
+            .sort({score: -1})
+            .limit(1);
+
+        // Get additional stats
+        const stats = await FeedTheAnimal.aggregate([
+            {
+                $match: { userId: userId }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalGames: { $sum: 1 },
+                    bestScore: { $max: "$score" },
+                    averageScore: { $avg: "$score" },
+                    totalCorrectFeeds: { $sum: "$correctFeeds" },
+                    totalIncorrectFeeds: { $sum: "$incorrectFeeds" },
+                    longestTimePlayed: { $max: "$timePlayed" }
+                }
+            }
+        ]);
+
+        const gameStats = stats.length > 0 ? stats[0] : {
+            totalGames: 0,
+            bestScore: 0,
+            averageScore: 0,
+            totalCorrectFeeds: 0,
+            totalIncorrectFeeds: 0,
+            longestTimePlayed: 0
+        };
+
+        res.json({
+            success: true,
+            data: {
+                statistics: {
+                    totalGamesPlayed: totalGamesPlayed,
+                    bestScore: gameStats.bestScore,
+                    averageScore: Math.round(gameStats.averageScore * 100) / 100, // Round to 2 decimal places
+                    totalCorrectFeeds: gameStats.totalCorrectFeeds,
+                    totalIncorrectFeeds: gameStats.totalIncorrectFeeds,
+                    longestTimePlayed: gameStats.longestTimePlayed,
+                    bestGame: bestScoreGame
+                }
+            }
+        });
+    } catch (error) {
+        console.error('[Game Route] Error fetching history:', error);
+        res.status(500).json({
+            success: false,
+            error: 'Failed to fetch game history'
+        });
+    }
+});
 
 
 export default router;
