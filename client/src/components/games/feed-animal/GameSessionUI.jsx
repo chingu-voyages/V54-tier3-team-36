@@ -14,15 +14,13 @@ const GameOverScreen = ({reason, score, onRestart}) => (
             </div>
 
             <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                <p className="text-4xl font-bold text-blue-600">{score}</p>
+                <p className="text-4xl font-bold text-green-700">{score}</p>
                 <p className="text-sm text-gray-500">Final Score</p>
             </div>
 
             <button
                 onClick={onRestart}
-                className="w-full max-w-xs px-6 py-3 bg-blue-600 text-white rounded-lg
-                           hover:bg-blue-700 transition-all font-semibold text-lg
-                           transform hover:scale-105 active:scale-95 shadow-lg"
+                className="px-8 py-4 bg-green-600 text-white rounded-xl text-xl hover:bg-green-700 transition font-bold shadow-lg border-2 border-white"
             >
                 Play Again
             </button>
