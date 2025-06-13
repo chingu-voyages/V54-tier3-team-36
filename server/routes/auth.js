@@ -45,9 +45,15 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({ name, email: lowerEmail, password: hashedPassword, age });
     await newUser.save();
 
+    console.log("new user")
+    console.log(newUser)
+
     // Create dashboard for new user
-    const newDashboard = new Dashboard({user: newUser._id});
+    const newDashboard = new Dashboard({userId: newUser._id});
     await newDashboard.save()
+
+    console.log("new dashboard")
+    console.log(newDashboard)
 
     // Only sent the token back in response. will validate the token to retrieve user data
     const token = jwt.sign({user: newUser}, process.env.JWT_TOKEN_SECRET );
