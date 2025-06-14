@@ -3,46 +3,48 @@ import PropTypes from "prop-types";
 function FooterUserProfiles({profiles}) {
     return (
         <div
-            className="box1 px-8 mt-22 w-full rounded-3xl pt-8 pb-8 p-[20px] bg-footerUserProfiles dark:bg-gray-900 dark:text-white">
+            className="box1 px-4 sm:px-6 md:px-8 mt-6 sm:mt-12 md:mt-22 w-full rounded-2xl sm:rounded-3xl pt-6 sm:pt-8 pb-6 sm:pb-8 p-4 sm:p-[20px] bg-footerUserProfiles dark:bg-gray-900 dark:text-white">
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
                 {profiles.map((profile, index) => (
                     <div
                         key={index}
-                        className="profile-card group relative overflow-hidden rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 p-5 transition-all duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:shadow-white/10 hover:border-white/30 hover:bg-gray-800/70 cursor-pointer"
+                        className="profile-card group relative overflow-hidden rounded-xl sm:rounded-2xl bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 p-4 sm:p-5 transition-all duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:shadow-white/10 hover:border-white/30 hover:bg-gray-800/70 cursor-pointer"
                     >
                         <div
                             className="absolute inset-0 bg-gradient-to-r from-white/5 to-gray-200/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
+                        {/* KEEP HORIZONTAL LAYOUT ON ALL SCREEN SIZES */}
                         <div className="relative z-10 flex justify-between items-center">
                             <div className="profile-info">
-                                <h2 className="text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors duration-300">
+                                <h2 className="text-base sm:text-lg font-semibold text-white group-hover:text-emerald-400 transition-colors duration-300">
                                     {profile.name}
                                 </h2>
-                                <p className="text-sm text-gray-300 group-hover:text-gray-100 transition-colors duration-300">
+                                <p className="text-xs sm:text-sm text-gray-300 group-hover:text-gray-100 transition-colors duration-300">
                                     {profile.role}
                                 </p>
                             </div>
 
+                            {/* HORIZONTAL ICONS ON ALL SCREEN SIZES */}
                             <div className="icon-containers flex items-center space-x-3">
                                 <a
                                     href={profile.linkedin}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="social-icon-wrapper group/linkedin relative w-10 h-10 flex items-center justify-center rounded-lg bg-gray-600/80 backdrop-blur-sm transition-all duration-300 hover:bg-gray-500 hover:scale-110 hover:shadow-lg hover:shadow-white/20"
+                                    className="social-icon-wrapper group/linkedin relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-gray-600/80 backdrop-blur-sm transition-all duration-300 hover:bg-gray-500 hover:scale-110 hover:shadow-lg hover:shadow-white/20"
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    <i className="fab fa-linkedin text-lg text-gray-200 group-hover/linkedin:text-white transition-colors duration-300"/>
+                                    <i className="fab fa-linkedin text-sm sm:text-lg text-gray-200 group-hover/linkedin:text-white transition-colors duration-300"/>
                                 </a>
 
                                 <a
                                     href={profile.github}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="social-icon-wrapper group/github relative w-10 h-10 flex items-center justify-center rounded-lg bg-gray-600/80 backdrop-blur-sm transition-all duration-300 hover:bg-gray-500 hover:scale-110 hover:shadow-lg hover:shadow-white/20"
+                                    className="social-icon-wrapper group/github relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center rounded-lg bg-gray-600/80 backdrop-blur-sm transition-all duration-300 hover:bg-gray-500 hover:scale-110 hover:shadow-lg hover:shadow-white/20"
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    <i className="fab fa-github text-lg text-gray-200 group-hover/github:text-white transition-colors duration-300"/>
+                                    <i className="fab fa-github text-sm sm:text-lg text-gray-200 group-hover/github:text-white transition-colors duration-300"/>
                                 </a>
                             </div>
                         </div>
