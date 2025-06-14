@@ -4,7 +4,6 @@ function FooterUserProfiles({profiles}) {
     return (
         <div
             className="box1 px-8 mt-22 w-full rounded-3xl pt-8 pb-8 p-[20px] bg-footerUserProfiles dark:bg-gray-900 dark:text-white">
-            <p className="text-white mb-6 text-lg font-medium">Meet Our Team</p>
 
             <div className="space-y-4">
                 {profiles.map((profile, index) => (
