@@ -1,16 +1,19 @@
-import { profiles } from "./footerUserData";
+import {profiles} from "./footerUserData";
 import FooterUserProfiles from "./FooterUserProfiles";
 import FooterLogos from "./FooterLogos";
 
 function FooterContent() {
-  return (
-    <div className="flex flex-col md:flex-row justify-between items-center w-full space-y-4 md:space-y-0 md:space-x-4 lg:space-x-8 text-gray-200 pt-2">
-      <FooterUserProfiles profiles={profiles} />
-      <div className="flex justify-center md:justify-end w-96">
-        <FooterLogos />
-      </div>
-    </div>
-  );
+    return (
+        <div
+            className="flex flex-col lg:flex-row justify-between items-stretch w-full space-y-6 lg:space-y-0 lg:space-x-8 text-gray-200 pt-2">
+            <div className="w-full lg:w-1/2 flex-shrink-0">
+                <FooterUserProfiles profiles={profiles}/>
+            </div>
+            <div className="w-full lg:w-1/2 flex items-center justify-center lg:justify-end">
+                <FooterLogos/>
+            </div>
+        </div>
+    );
 }
 
 export default FooterContent;

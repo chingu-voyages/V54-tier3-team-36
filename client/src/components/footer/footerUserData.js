@@ -46,4 +46,11 @@ export const profiles = [
     linkedin: "https://www.linkedin.com/in/aigul-ermak/"
   },
 
+  {
+    name: "Adelola Abioye",
+    role: "Scrum Master",
+    github: "https://github.com/Adel-abio",
+    linkedin: "https://www.linkedin.com/in/adelola-abioye/"
+  },
+
 ];
