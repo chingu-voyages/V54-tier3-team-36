@@ -8,7 +8,7 @@ router.get("/:id", async (req, res)=> {
   const {id} = req.params;
 
   try {
-    const dashboard = await Dashboard.findOne({ user: id});
+    const dashboard = await Dashboard.findOne({ userId: id});
     
     if (!dashboard) {
       return res.status(404).json({ success: false, message: "User not found" });
