@@ -138,7 +138,7 @@ const Profile = () => {
           <div
             key={game}
             onClick={() => handleGameClick(game)}
-            className="bg-green-100 shadow-md rounded-xl p-6 cursor-pointer hover:bg-green-200 transition-colors h-[180px]"
+            className="bg-green-100 shadow-md rounded-xl p-6 cursor-pointer hover:bg-green-200 transition-colors h-[180px] shine-on-hover"
           >
             <h3 className="font-bold text-lg text-gray-800 mb-2">{game}</h3>
             <div className="space-y-1 text-gray-700">

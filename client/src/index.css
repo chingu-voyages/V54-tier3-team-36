@@ -156,3 +156,32 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+/* ===== SHINE EFFECT FOR GAME CARDS ===== */
+.shine-on-hover {
+  position: relative;
+  overflow: hidden;
+}
+.shine-on-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 60%, rgba(255,255,255,0) 100%);
+  transform: skewX(-20deg);
+  z-index: 2;
+  pointer-events: none;
+}
+.shine-on-hover:hover::before {
+  animation: shine-move 0.7s cubic-bezier(0.4,0,0.2,1) 1;
+}
+@keyframes shine-move {
+  0% {
+    left: -75%;
+  }
+  100% {
+    left: 125%;
+  }
+}
