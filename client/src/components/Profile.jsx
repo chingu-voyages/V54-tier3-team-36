@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from "react";
 import GameStatsModal from "./GameStatsModal";
+import avatar1 from "../assets/profile/avatar1.png";
+import avatar2 from "../assets/profile/avatar2.png";
+import avatar3 from "../assets/profile/avatar3.png";
+import avatar4 from "../assets/profile/avatar4.png";
+import avatar5 from "../assets/profile/avatar5.png";
+import avatar6 from "../assets/profile/avatar6.png";
+import avatar7 from "../assets/profile/avatar7.png";
+import avatar8 from "../assets/profile/avatar8.png";
+import avatar9 from "../assets/profile/avatar9.png";
+
+const avatarList = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
 const Profile = () => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedAvatar, setSelectedAvatar] = useState(avatarList[0]);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   // TODO: Replace with actual API call to fetch user data
   useEffect(() => {
@@ -111,12 +124,8 @@ const Profile = () => {
   return (
     <div className="w-full max-w-7xl bg-white rounded-3xl shadow-xl p-6 md:p-10 my-8">
       <div className="flex items-center space-x-4 mb-8">
-        <div className="w-16 h-16 rounded-full border-2 border-green-300 flex items-center justify-center text-lg font-semibold text-gray-400">
-          {userData.avatar ? (
-            <img src={userData.avatar} alt="User avatar" className="w-full h-full rounded-full" />
-          ) : (
-            "Avatar"
-          )}
+        <div className="w-28 h-28 rounded-full flex items-center justify-center text-lg font-semibold text-gray-400 cursor-pointer p-1 bg-white" onClick={() => setShowAvatarModal(true)}>
+          <img src={selectedAvatar} alt="User avatar" className="w-24 h-24 rounded-full object-cover block aspect-square" />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-800 leading-tight">{userData.username}</h2>
@@ -186,6 +195,28 @@ const Profile = () => {
           avatars={userData.gameStats[selectedGame].avatars}
           onClose={handleCloseModal}
         />
+      )}
+
+      {/* Avatar Selection Modal */}
+      {showAvatarModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full">
+            <h3 className="text-lg font-bold mb-4 text-center">Choose your avatar</h3>
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              {avatarList.map((avatar, idx) => (
+                <button
+                  key={idx}
+                  className={`rounded-full border-4 ${selectedAvatar === avatar ? 'border-green-500' : 'border-transparent'} focus:outline-none bg-white flex items-center justify-center p-1 aspect-square w-24 h-24`}
+                  onClick={() => { setSelectedAvatar(avatar); setShowAvatarModal(false); }}
+                  style={{ aspectRatio: '1/1' }}
+                >
+                  <img src={avatar} alt={`Avatar ${idx + 1}`} className="w-20 h-20 rounded-full object-cover block aspect-square" style={{ aspectRatio: '1/1' }} />
+                </button>
+              ))}
+            </div>
+            <button className="w-full py-2 bg-gray-200 rounded-lg font-semibold" onClick={() => setShowAvatarModal(false)}>Cancel</button>
+          </div>
+        </div>
       )}
     </div>
   );
