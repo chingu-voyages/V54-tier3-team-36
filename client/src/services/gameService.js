@@ -52,9 +52,8 @@ export const saveGameResult = async (gameData) => {
         return await handleResponse(response);
 
     } catch (error) {
-        console.error('[Game Service] Error saving game result:', error);
+        console.error('Error saving game result:', error);
 
-        // Provide more specific error messages
         if (error.message.includes('token') || error.message.includes('authentication')) {
             throw new Error('Authentication failed. Please log in again.');
         }
@@ -65,20 +64,10 @@ export const saveGameResult = async (gameData) => {
 
 export const getGameHistory = async () => {
     try {
-        const response = await axios.get(`${API_URL}/games/feed-the-animal/history`);
+        const response = await axios.get(`${API_URL}/games/history`);
         return response.data;
     } catch (error) {
         console.error('Error fetching game history:', error);
-        throw error;
-    }
-};
-
-export const getLeaderboard = async () => {
-    try {
-        const response = await axios.get(`${API_URL}/games/feed-the-animal/leaderboard`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching leaderboard:', error);
         throw error;
     }
 };
