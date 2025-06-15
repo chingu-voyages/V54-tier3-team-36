@@ -12,6 +12,8 @@ import avatar9 from "../assets/profile/avatar9.png";
 
 const avatarList = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
 const Profile = () => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -19,60 +21,85 @@ const Profile = () => {
   const [selectedAvatar, setSelectedAvatar] = useState(avatarList[0]);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
 
-  // TODO: Replace with actual API call to fetch user data
   useEffect(() => {
-    // Simulating API call
     const fetchUserData = async () => {
+      setIsLoading(true);
       try {
-        // This will be replaced with actual API call
-        // const response = await fetch('/api/user/profile');
-        // const data = await response.json();
-        
-        // Placeholder data structure matching expected backend response
-        const mockUserData = {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const userRes = await fetch(`${BACKEND_URL}/api/auth/verifytoken`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const userJson = await userRes.json();
+          if (userJson.success) {
+            const user = userJson.user;
+            // Fetch dashboard/game stats
+            const dashRes = await fetch(`${BACKEND_URL}/api/dashboard/${user._id}`);
+            const dashJson = await dashRes.json();
+            let stats = {
+              "Animal Puzzle": {
+                stats: [
+                  { label: "Total tries", value: dashJson.data?.slidingPuzzle?.numOfTries ?? "-" },
+                  { label: "Best Score", value: dashJson.data?.slidingPuzzle?.highestPoints ?? "-" },
+                ],
+                achievements: [],
+                avatars: [],
+              },
+              "Guess the Animal Sound": {
+                stats: [
+                  { label: "Total tries", value: dashJson.data?.guessSound?.numOfTries ?? "-" },
+                  { label: "Best Score", value: dashJson.data?.guessSound?.highestPoints ?? "-" },
+                ],
+                achievements: [],
+                avatars: [],
+              },
+              "Animal Memory Game": {
+                stats: [
+                  { label: "Total tries", value: dashJson.data?.flashCard?.numOfTries ?? "-" },
+                  { label: "Best Score", value: dashJson.data?.flashCard?.highestPoints ?? "-" },
+                ],
+                achievements: [],
+                avatars: [],
+              },
+            };
+            setUserData({
+              username: user.name,
+              email: user.email,
+              avatar: null,
+              gameStats: stats,
+              unlockedAvatars: [],
+              achievements: [],
+            });
+            setIsLoading(false);
+            return;
+          }
+        }
+        // Not logged in: use mock data
+        setUserData({
           username: "User Name",
           email: "example.com",
-          avatar: null, // Will be replaced with actual avatar URL
+          avatar: null,
           gameStats: {
             "Animal Puzzle": {
               stats: [
-                { label: "Total tries", value: "—" },
-                { label: "Lowest moves", value: "—" },
-                { label: "Highest moves", value: "—" },
+                { label: "Total tries", value: "-" },
+                { label: "Best Score", value: "-" },
               ],
               achievements: [],
               avatars: [],
             },
             "Guess the Animal Sound": {
               stats: [
-                { label: "Wins", value: "—" },
-                { label: "Tokens", value: "—" },
-                { label: "Trophy", value: "—" },
+                { label: "Total tries", value: "-" },
+                { label: "Best Score", value: "-" },
               ],
               achievements: [],
               avatars: [],
             },
             "Animal Memory Game": {
               stats: [
-                { label: "Tries", value: "—" },
-                { label: "Completed", value: "—" },
-                { label: "Perfect runs", value: "—" },
-              ],
-              achievements: [],
-              avatars: [],
-            },
-            "Animal Quiz": {
-              stats: [
-                { label: "Correct answers", value: "—" },
-                { label: "Completed", value: "—" },
-              ],
-              achievements: [],
-              avatars: [],
-            },
-            "Hungry Paws": {
-              stats: [
-                { label: "Total tries", value: "—" },
-                { label: "Best Score", value: "—" }
+                { label: "Total tries", value: "-" },
+                { label: "Best Score", value: "-" },
               ],
               achievements: [],
               avatars: [],
@@ -80,26 +107,18 @@ const Profile = () => {
           },
           unlockedAvatars: [],
           achievements: [],
-        };
-
-        setUserData(mockUserData);
+        });
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        setUserData(null);
         setIsLoading(false);
       }
     };
-
     fetchUserData();
   }, []);
 
-  const handleGameClick = (game) => {
-    setSelectedGame(game);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedGame(null);
-  };
+  const handleGameClick = (game) => setSelectedGame(game);
+  const handleCloseModal = () => setSelectedGame(null);
 
   if (isLoading) {
     return (
@@ -111,21 +130,11 @@ const Profile = () => {
     );
   }
 
-  if (!userData) {
-    return (
-      <div className="w-full max-w-7xl bg-white rounded-3xl shadow-xl p-6 md:p-10 my-8">
-        <div className="flex items-center justify-center h-64">
-          <p className="text-gray-500">Failed to load profile data</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full max-w-7xl bg-white rounded-3xl shadow-xl p-6 md:p-10 my-8">
       <div className="flex items-center space-x-4 mb-8">
-        <div className="w-28 h-28 rounded-full flex items-center justify-center text-lg font-semibold text-gray-400 cursor-pointer p-1 bg-white" onClick={() => setShowAvatarModal(true)}>
-          <img src={selectedAvatar} alt="User avatar" className="w-24 h-24 rounded-full object-cover block aspect-square" />
+        <div className="w-36 h-36 rounded-full flex items-center justify-center text-lg font-semibold text-gray-400 cursor-pointer p-2 bg-white" onClick={() => setShowAvatarModal(true)}>
+          <img src={selectedAvatar} alt="User avatar" className="w-32 h-32 rounded-full object-cover block aspect-square" />
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-800 leading-tight">{userData.username}</h2>
@@ -138,7 +147,7 @@ const Profile = () => {
           <div
             key={game}
             onClick={() => handleGameClick(game)}
-            className="bg-green-100 shadow-md rounded-xl p-6 cursor-pointer hover:bg-green-200 transition-colors h-[180px] shine-on-hover"
+            className="bg-green-100 shadow-md rounded-xl p-8 cursor-pointer hover:bg-green-200 transition-colors h-[200px] shine-on-hover"
           >
             <h3 className="font-bold text-lg text-gray-800 mb-2">{game}</h3>
             <div className="space-y-1 text-gray-700">
@@ -191,8 +200,6 @@ const Profile = () => {
         <GameStatsModal
           game={selectedGame}
           stats={userData.gameStats[selectedGame].stats}
-          achievements={userData.gameStats[selectedGame].achievements}
-          avatars={userData.gameStats[selectedGame].avatars}
           onClose={handleCloseModal}
         />
       )}
@@ -202,15 +209,15 @@ const Profile = () => {
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 shadow-xl max-w-md w-full">
             <h3 className="text-lg font-bold mb-4 text-center">Choose your avatar</h3>
-            <div className="grid grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-3 gap-6 mb-6">
               {avatarList.map((avatar, idx) => (
                 <button
                   key={idx}
-                  className={`rounded-full border-4 ${selectedAvatar === avatar ? 'border-green-500' : 'border-transparent'} focus:outline-none bg-white flex items-center justify-center p-1 aspect-square w-24 h-24`}
+                  className={`rounded-full border-4 ${selectedAvatar === avatar ? 'border-green-500' : 'border-transparent'} focus:outline-none bg-white flex items-center justify-center p-2 aspect-square w-28 h-28 cursor-pointer`}
                   onClick={() => { setSelectedAvatar(avatar); setShowAvatarModal(false); }}
                   style={{ aspectRatio: '1/1' }}
                 >
-                  <img src={avatar} alt={`Avatar ${idx + 1}`} className="w-20 h-20 rounded-full object-cover block aspect-square" style={{ aspectRatio: '1/1' }} />
+                  <img src={avatar} alt={`Avatar ${idx + 1}`} className="w-24 h-24 rounded-full object-cover block aspect-square" style={{ aspectRatio: '1/1' }} />
                 </button>
               ))}
             </div>
