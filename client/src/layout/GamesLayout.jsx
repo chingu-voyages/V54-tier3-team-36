@@ -8,6 +8,7 @@ import backgroundImage from "../assets/backgroundImage.jpg";
 import { ToastContainer } from "react-toastify";
 import GuessAnimalSound from "../components/games/guess-animal-sound/GuessAnimalSound";
 import "react-toastify/dist/ReactToastify.css";
+import GameContainer from "../components/games/feed-animal/GameContainer.jsx";
 
 const GamesLayout = () => {
   const pageBg = "bg-white bg-opacity-0";
@@ -31,7 +32,7 @@ const GamesLayout = () => {
             <FlashCardGame />
           </div>
           <div className="flex justify-center w-full">
-            <Component2 />
+            <GameContainer />
           </div>
         </div>
         <Footer />
