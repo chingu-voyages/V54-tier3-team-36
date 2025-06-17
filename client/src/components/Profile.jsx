@@ -9,12 +9,14 @@ import avatar6 from "../assets/profile/avatar6.png";
 import avatar7 from "../assets/profile/avatar7.png";
 import avatar8 from "../assets/profile/avatar8.png";
 import avatar9 from "../assets/profile/avatar9.png";
+import { useAuth } from "../context/auth";
 
 const avatarList = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const Profile = () => {
+  const { user } = useAuth();
   const [selectedGame, setSelectedGame] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -137,8 +139,8 @@ const Profile = () => {
           <img src={selectedAvatar} alt="User avatar" className="w-32 h-32 rounded-full object-cover block aspect-square" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-800 leading-tight">{userData.username}</h2>
-          <p className="text-gray-500 text-sm">{userData.email}</p>
+          <h2 className="text-2xl font-bold text-gray-800 leading-tight">{user?.name || 'Guest User'}</h2>
+          <p className="text-gray-500 text-sm">{user?.email || 'Not signed in'}</p>
         </div>
       </div>
 
