@@ -10,13 +10,14 @@ import avatar7 from "../assets/profile/avatar7.png";
 import avatar8 from "../assets/profile/avatar8.png";
 import avatar9 from "../assets/profile/avatar9.png";
 import { useAuth } from "../context/auth";
+import { createStats } from "./profilehelper";
 
 const avatarList = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, backendUrl } = useAuth();
   const [selectedGame, setSelectedGame] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,88 +28,34 @@ const Profile = () => {
     const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          const userRes = await fetch(`${BACKEND_URL}/api/auth/verifytoken`, {
-            headers: { Authorization: `Bearer ${token}` },
+        if (user) {
+          console.log("Fetching dashboard...")
+          const response = await fetch(`${backendUrl}/api/dashboard/${user._id}`)
+          const result = await response.json()
+          const dashJson = result.data
+
+          let stats = createStats(dashJson.games)
+            
+          setUserData({
+            username: user.name,
+            email: user.email,
+            avatar: null,
+            gameStats: stats,
+            unlockedAvatars: [],
+            achievements: [],
           });
-          const userJson = await userRes.json();
-          if (userJson.success) {
-            const user = userJson.user;
-            // Fetch dashboard/game stats
-            const dashRes = await fetch(`${BACKEND_URL}/api/dashboard/${user._id}`);
-            const dashJson = await dashRes.json();
-            console.log("dashJson")
-            console.log(dashJson.result)
-            let stats = {
-              "Animal Puzzle": {
-                stats: [
-                  { label: "Total tries", value: dashJson.data?.slidingPuzzle?.numOfTries ?? "-" },
-                  { label: "Best Score", value: dashJson.data?.slidingPuzzle?.highestPoints ?? "-" },
-                ],
-                achievements: [],
-                avatars: [],
-              },
-              "Guess the Animal Sound": {
-                stats: [
-                  { label: "Total tries", value: dashJson.data?.guessSound?.numOfTries ?? "-" },
-                  { label: "Best Score", value: dashJson.data?.guessSound?.highestPoints ?? "-" },
-                ],
-                achievements: [],
-                avatars: [],
-              },
-              "Animal Memory Game": {
-                stats: [
-                  { label: "Total tries", value: dashJson.data?.flashCard?.numOfTries ?? "-" },
-                  { label: "Best Score", value: dashJson.data?.flashCard?.highestPoints ?? "-" },
-                ],
-                achievements: [],
-                avatars: [],
-              },
-            };
-            setUserData({
-              username: user.name,
-              email: user.email,
-              avatar: null,
-              gameStats: stats,
-              unlockedAvatars: [],
-              achievements: [],
-            });
-            setIsLoading(false);
-            return;
-          }
+          setIsLoading(false);
+          return;
         }
+        
         // Not logged in: use mock data
+
+        let stats = createStats([])
         setUserData({
           username: "User Name",
           email: "example.com",
           avatar: null,
-          gameStats: {
-            "Animal Puzzle": {
-              stats: [
-                { label: "Total tries", value: "-" },
-                { label: "Best Score", value: "-" },
-              ],
-              achievements: [],
-              avatars: [],
-            },
-            "Guess the Animal Sound": {
-              stats: [
-                { label: "Total tries", value: "-" },
-                { label: "Best Score", value: "-" },
-              ],
-              achievements: [],
-              avatars: [],
-            },
-            "Animal Memory Game": {
-              stats: [
-                { label: "Total tries", value: "-" },
-                { label: "Best Score", value: "-" },
-              ],
-              achievements: [],
-              avatars: [],
-            },
-          },
+          gameStats: stats,
           unlockedAvatars: [],
           achievements: [],
         });
@@ -119,8 +66,9 @@ const Profile = () => {
       }
     };
     fetchUserData();
-  }, []);
+  }, [user]);
 
+  
   const handleGameClick = (game) => setSelectedGame(game);
   const handleCloseModal = () => setSelectedGame(null);
 
