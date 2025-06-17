@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Component1 from '../components/Component1'
-import Component2 from '../components/Component2'
+import Profile from '../components/Profile'
 import NavBar from '../components/NavBar'
 import { useAuth } from '../context/auth'
 import Footer from '../components/footer/Footer'
@@ -43,10 +42,7 @@ const DashboardLayout = () => {
         <NavBar bgColor={pageBg}/>
         <div className="w-full px-6 py-8 space-y-4">
           <div className="flex justify-center w-full">
-            <Component1 />
-          </div>
-          <div className="flex justify-center w-full">
-            <Component2 />
+            <Profile />
           </div>
         </div>
         <Footer />
