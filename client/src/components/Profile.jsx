@@ -38,6 +38,8 @@ const Profile = () => {
             // Fetch dashboard/game stats
             const dashRes = await fetch(`${BACKEND_URL}/api/dashboard/${user._id}`);
             const dashJson = await dashRes.json();
+            console.log("dashJson")
+            console.log(dashJson.result)
             let stats = {
               "Animal Puzzle": {
                 stats: [

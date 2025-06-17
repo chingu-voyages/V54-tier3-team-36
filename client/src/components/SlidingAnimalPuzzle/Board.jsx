@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Tile from "./Tile";
 import { TILE_COUNT, GRID_SIZE, BOARD_SIZE, SMALL_BOARD_SIZE } from "./constants";
 import { canSwap, shuffle, swap, isSolved } from "./helpers";
+import { useAuth } from "../../context/auth";
 
 // For responsive design
 const useIsMobile = () => {
@@ -19,6 +20,7 @@ const useIsMobile = () => {
 
 
 const Board = ({ imgUrl }) => {
+  const { user, backendUrl } = useAuth();
   const [tiles, setTiles] = useState([...Array(TILE_COUNT).keys()]);
   const [isStarted, setIsStarted] = useState(false);
   const [numOfMoves, setNumOfMoves] = useState(0);
@@ -64,6 +66,27 @@ const Board = ({ imgUrl }) => {
     setTiles([...Array(TILE_COUNT).keys()]);
   };
 
+
+  const handleResult = async () => {
+    const data = {
+      userId: user._id,
+      gameName: "slidingPuzzle",
+      score: numOfMoves,
+      win: true
+    }
+    try {
+      const res = await fetch(`${backendUrl}/api/games/result`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      console.log(result)
+    } catch (error) {
+      console.error("Error saving result", error)
+    }
+  }
+
   const boardSize = isMobile ? SMALL_BOARD_SIZE : BOARD_SIZE
 
   const hasWon = isSolved(tiles);
@@ -93,7 +116,17 @@ const Board = ({ imgUrl }) => {
           />
         ))}
       </ul>
-      {hasWon && isStarted && <p className="mt-4 text-teal-400 font-bold text-2xl">Congrats! Puzzle Solved 🎉 You used {numOfMoves} Moves</p>}
+      {hasWon && isStarted && 
+        <p className="mt-4 text-teal-400 font-bold text-2xl">Congrats! Puzzle Solved 🎉 You used {numOfMoves} Moves 
+          {user && <button 
+              className="px-4 py-2 mx-2 bg-teal-700 text-sm shadow-lg shadow-teal-500/50 border-none rounded-md text-white hover:bg-teal-600"
+              onClick={handleResult}
+            >
+              Save Result
+            </button>
+          }
+        </p>
+      }
       <div className="flex flex-col gap-3 justify-center">
         {!isStarted ? (
           <div className="flex gap-4 justify-center mt-12">
