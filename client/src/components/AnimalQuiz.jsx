@@ -72,7 +72,7 @@ const AnimalQuiz = () => {
   const handleResult = async () => {
     const data = {
       userId: user._id,
-      gameName: "quizzes",
+      gameName: "animalQuiz",
       score: totalScore,
       win: true
     }

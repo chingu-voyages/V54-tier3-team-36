@@ -1,39 +1,38 @@
-import React, { useEffect, useState } from 'react'
 import Profile from '../components/Profile'
 import NavBar from '../components/NavBar'
-import { useAuth } from '../context/auth'
 import Footer from '../components/footer/Footer'
 import backgroundImage from "../assets/backgroundImage.jpg"
 
 const DashboardLayout = () => {
   const pageBg = "bg-white bg-opacity-0"
-  
-  const apiUrl = 'https://v54-tier3-team-36.onrender.com'
-  const localApiUrl = 'http://localhost:5000'
 
-  const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
+  // ALREADY IN PROFILE COMPONENT
+  // const apiUrl = 'https://v54-tier3-team-36.onrender.com'
+  // const localApiUrl = 'http://localhost:5000'
 
-  const { user } = useAuth();
-  const [ dashboardInfo, setDashboardInfo ] = useState({})
+  // const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl:localApiUrl
 
-  useEffect(()=> {
-    if (user) {
-      const fetchDashboard = async () => {
-        try {
-          console.log("Fetching dashboard...")
-          const response = await fetch(`${backendUrl}/api/dashboard/${user._id}`)
-          const result = await response.json()
-          setDashboardInfo(result.data)
-        } catch (error) {
-          console.error("Error fetching dashboard", error)
-        }
-      }
-      fetchDashboard();
-    }
-  }, [user])
+  // const { user } = useAuth();
+  // const [ dashboardInfo, setDashboardInfo ] = useState({})
 
-  console.log("Dashboard info in state")
-  console.log(dashboardInfo)
+  // useEffect(()=> {
+  //   if (user) {
+  //     const fetchDashboard = async () => {
+  //       try {
+  //         console.log("Fetching dashboard...")
+  //         const response = await fetch(`${backendUrl}/api/dashboard/${user._id}`)
+  //         const result = await response.json()
+  //         setDashboardInfo(result.data)
+  //       } catch (error) {
+  //         console.error("Error fetching dashboard", error)
+  //       }
+  //     }
+  //     fetchDashboard();
+  //   }
+  // }, [user])
+
+  // console.log("Dashboard info in state")
+  // console.log(dashboardInfo)
 
   return (
     <div className="md:min-h-screen flex items-center justify-center bg-fixed bg-no-repeat bg-center bg-cover"
