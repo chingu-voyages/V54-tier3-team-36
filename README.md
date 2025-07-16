@@ -42,3 +42,4 @@ coding!
 - Aigul Yermagambetova: [GitHub](https://github.com/aigul-ermak) / [LinkedIn](https://www.linkedin.com/in/aigul-ermak/)
 - Wataru Okada: [GitHub](https://github.com/WataTechJP) / [LinkedIn](https://www.linkedin.com/in/wataru-okada-509319334/)
 - Adelola Abioye: [GitHub](https://github.com/Adel-abio) / [LinkedIn](https://www.linkedin.com/in/adelola-abioye/)
+- Deepali Sangole: [GitHub](https://github.com/ss-deep) / [LinkedIn](https://www.linkedin.com/in/deepali-sangole-49b0841b/)
