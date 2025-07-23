@@ -1,4 +1,6 @@
 {
+  "files": [],
+  "references": [],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
