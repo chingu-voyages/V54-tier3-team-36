@@ -1,16 +1,16 @@
 import React from 'react'
-import {useNavigate} from 'react-router';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Lock, Mail, User} from "lucide-react";
-import {useAuth} from '../context/auth';
-import {useToast} from "@/hooks/use-toast.js";
-import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {Checkbox} from "@/components/ui/checkbox";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select";
-import {Button} from "@/components/ui/button";
-import {signupSchema} from "@/schemas/auth.schema.js";
+import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Lock, Mail, User } from "lucide-react";
+import { useAuth } from '../context/auth';
+import { useToast } from "@/hooks/use-toast.js";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox/checkbox.jsx";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { signupSchema } from "@/schemas/auth.schema.js";
 
 const Signup = () => {
 
@@ -20,8 +20,8 @@ const Signup = () => {
     const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl : localApiUrl
 
     const navigate = useNavigate();
-    const {login} = useAuth();
-    const {toast} = useToast();
+    const { login } = useAuth();
+    const { toast } = useToast();
 
     const form = useForm({
         resolver: zodResolver(signupSchema),
@@ -40,7 +40,7 @@ const Signup = () => {
         try {
             const res = await fetch(`${backendUrl}/api/auth/signup`, {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
             });
             const result = await res.json();
@@ -54,7 +54,7 @@ const Signup = () => {
             } else {
                 sessionStorage.setItem("token", result.token);
                 login(result.token);
-                toast({title: "Welcome!", description: "Account created."});
+                toast({ title: "Welcome!", description: "Account created." });
                 navigate("/");
             }
         } catch (error) {
@@ -83,7 +83,7 @@ const Signup = () => {
                         <FormField
                             control={form.control}
                             name="name"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <div className="relative">
                                         <FormControl>
@@ -98,7 +98,7 @@ const Signup = () => {
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -107,7 +107,7 @@ const Signup = () => {
                         <FormField
                             control={form.control}
                             name="email"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <div className="relative">
                                         <FormControl>
@@ -123,7 +123,7 @@ const Signup = () => {
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -131,7 +131,7 @@ const Signup = () => {
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <div className="relative">
                                         <FormControl>
@@ -147,7 +147,7 @@ const Signup = () => {
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -155,7 +155,7 @@ const Signup = () => {
                         <FormField
                             control={form.control}
                             name="age"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
                                         <Select
@@ -164,7 +164,7 @@ const Signup = () => {
                                         >
                                             <SelectTrigger
                                                 className="w-full rounded-full py-3 px-4 pr-10 placeholder-white/70 text-white bg-transparent border border-transparent ring-1 ring-white/50 hover:ring-white focus:ring-2 focus:ring-teal-800 focus:outline-none transition">
-                                                <SelectValue placeholder="Select your age"/>
+                                                <SelectValue placeholder="Select your age" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="<5">Less than 5</SelectItem>
@@ -175,7 +175,7 @@ const Signup = () => {
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
@@ -184,7 +184,7 @@ const Signup = () => {
                             <FormField
                                 control={form.control}
                                 name="consent"
-                                render={({field}) => (
+                                render={({ field }) => (
                                     <FormItem className="flex items-center space-x-2">
                                         <FormControl>
                                             <Checkbox
@@ -195,7 +195,7 @@ const Signup = () => {
                                         <FormLabel htmlFor="consent" className="m-0 p-0 text-white">
                                             I have permission from a parent or guardian.
                                         </FormLabel>
-                                        <FormMessage/>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
