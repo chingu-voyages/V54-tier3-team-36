@@ -13,7 +13,7 @@ describe("Checkbox component", () => {
     expect(checkbox).toHaveAttribute("data-state", "checked");
   });
 
-  it("is accessible with no a11y violations", async () => {
+  it("has no a11y violations", async () => {
     const { container } = render(<Checkbox aria-label="Accept terms" />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
