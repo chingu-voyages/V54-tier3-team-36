@@ -19,6 +19,13 @@ const GamesLayout = () => {
       style={{ backgroundImage: `url(${backgroundImage})` }}>
       <div className="container mx-auto m-10 p-2 md:m-32 md:p-8 bg-white bg-opacity-75 rounded-[3vw] overflow-hidden">
         <NavBar bgColor={pageBg} />
+        <div className="flex w-full gap-4">
+          <div className="w-1/3 h-5 bg-black"></div>
+          <div className="w-1/3 h-5 bg-black"></div>
+          <div className="w-1/3 h-5 bg-black"></div>
+          <div className="w-1/3 h-5 bg-black"></div>
+
+        </div>
         <div className="w-full px-6 py-8 space-y-8">
           <div className="flex justify-center w-full">
             <SlidingPuzzle />
