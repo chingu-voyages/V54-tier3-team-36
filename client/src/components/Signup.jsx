@@ -8,7 +8,7 @@ import { useToast } from "@/hooks/use-toast.js";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form";
 import { Input } from "../components/ui/input/input";
 import { Checkbox } from "@/components/ui/checkbox/checkbox.jsx";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select/select";
 import { Button } from "@/components/ui/button";
 import { signupSchema } from "@/schemas/auth.schema.js";
 
