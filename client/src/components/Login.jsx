@@ -8,7 +8,7 @@ import { useAuth } from '../context/auth';
 import { useToast } from "@/hooks/use-toast.js";
 import { Form, FormControl, FormField, FormItem, FormMessage, } from "@/components/ui/form";
 import { Input } from "../components/ui/input/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 
 
 const Login = () => {
