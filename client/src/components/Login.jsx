@@ -6,7 +6,7 @@ import { Lock, Mail } from 'lucide-react';
 import { loginSchema } from "../schemas/auth.schema";
 import { useAuth } from '../context/auth';
 import { useToast } from "@/hooks/use-toast.js";
-import { Form, FormControl, FormField, FormItem, FormMessage, } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage, } from "@/components/ui/form/form";
 import { Input } from "../components/ui/input/input";
 import { Button } from "@/components/ui/button/button";
 
