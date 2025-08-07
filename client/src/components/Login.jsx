@@ -1,14 +1,14 @@
 import React from 'react';
-import {useNavigate} from 'react-router';
-import {useForm} from 'react-hook-form';
-import {zodResolver} from "@hookform/resolvers/zod";
-import {Lock, Mail} from 'lucide-react';
-import {loginSchema} from "../schemas/auth.schema";
-import {useAuth} from '../context/auth';
-import {useToast} from "@/hooks/use-toast.js";
-import {Form, FormControl, FormField, FormItem, FormMessage,} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
+import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Lock, Mail } from 'lucide-react';
+import { loginSchema } from "../schemas/auth.schema";
+import { useAuth } from '../context/auth';
+import { useToast } from "@/hooks/use-toast.js";
+import { Form, FormControl, FormField, FormItem, FormMessage, } from "@/components/ui/form/form";
+import { Input } from "../components/ui/input/input";
+import { Button } from "@/components/ui/button/button";
 
 
 const Login = () => {
@@ -18,12 +18,12 @@ const Login = () => {
     const backendUrl = process.env.NODE_ENV === 'production' ? apiUrl : localApiUrl
 
     const navigate = useNavigate()
-    const {login} = useAuth();
-    const {toast} = useToast();
+    const { login } = useAuth();
+    const { toast } = useToast();
 
     const form = useForm({
         resolver: zodResolver(loginSchema),
-        defaultValues: {email: "", password: ""},
+        defaultValues: { email: "", password: "" },
     });
 
     const onSubmit = async (data) => {
@@ -75,11 +75,11 @@ const Login = () => {
                 <h2 className="text-2xl font-semibold text-white text-center">Login</h2>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}
-                          className="flex flex-col gap-6">
+                        className="flex flex-col gap-6">
                         <FormField
                             control={form.control}
                             name="email"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <div className="relative">
                                         <FormControl>
@@ -94,14 +94,14 @@ const Login = () => {
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
                         <FormField
                             control={form.control}
                             name="password"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <div className="relative">
                                         <FormControl>
@@ -117,12 +117,12 @@ const Login = () => {
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70"
                                         />
                                     </div>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
                         <Button type="submit"
-                                className="w-full mt-8 rounded-full py-5 text-white bg-teal-800 shadow-md shadow-teal-500/50 border-none transition-opacity  hover:bg-teal-700">Submit</Button>
+                            className="w-full mt-8 rounded-full py-5 text-white bg-teal-800 shadow-md shadow-teal-500/50 border-none transition-opacity  hover:bg-teal-700">Submit</Button>
 
                         <p className="text-center text-white text-sm">
                             Don’t have an account?{' '}
