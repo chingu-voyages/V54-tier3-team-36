@@ -1,6 +1,7 @@
 import Header from "../components/Header";
 import Footer from "../components/footer/Footer";
 import NavBar from "../components/NavBar";
+import TechStack from "../components/TechStack";
 import backgroundImage from "../assets/backgroundImage.jpg"
 import { Outlet } from "react-router";
 
@@ -14,7 +15,7 @@ const HomeLayout = () => {
       <div className="container mx-auto m-10 p-2 md:m-32 md:p-8 bg-white bg-opacity-75 rounded-[3vw] overflow-hidden">
         <NavBar bgColor={pageBg}/>
         <Outlet/>
-
+        <TechStack />
         <Footer />
       </div>
     </div>
