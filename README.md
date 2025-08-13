@@ -1,6 +1,6 @@
 # Animal World - Educational Gaming Platform 🦁🎮
 
-![img.png](img.png)
+![![img_1.png](img_1.png)](img.png)
 
 ![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)
@@ -9,9 +9,11 @@
 ![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-29.7-C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Coverage](https://img.shields.io/badge/Coverage-60%25+-brightgreen?style=for-the-badge&logo=jest&logoColor=white)
 
 ## Table of Contents
 
+- [Live Demo](#live-demo)
 - [Description](#description)
 - [Features](#features)
 - [Technologies Used](#technologies-used)
@@ -19,11 +21,17 @@
 - [Installation](#installation)
 - [Configuration](#configuration)
 - [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Testing](#testing)
 - [Deployment Checklist](#deployment-checklist)
 - [Contributing](#contributing)
 - [License](#license)
 - [Special Thanks](#special-thanks)
 - [Team Members](#team-members)
+
+## Live Demo
+
+**Live Application**: [https://v54-tier3-team-36.onrender.com](https://v54-tier3-team-36.onrender.com)
 
 ## Description
 
@@ -38,35 +46,35 @@ flashcards.
 
 ## Features
 
-### 🎮 Educational Games
+### Educational Games
 
 - **Animal Flashcard Game** - Interactive flashcards for learning animal facts with visual learning aids
 - **Sliding Animal Puzzle** - Classic sliding puzzle with multiple difficulty levels and timer functionality
 - **Guess Animal Sound Game** - Audio-based learning with 19 different authentic animal sounds
 - **Feed the Animal Game** - Drag-and-drop gameplay teaching about animal diets with scoring system
 
-### 👤 User Management
+### User Management
 
 - Secure registration and login with JWT authentication
 - Age group selection for age-appropriate content
 - Personal user profiles with avatars
 - Session management with secure token storage
 
-### 📊 Dashboard & Analytics
+### Dashboard & Analytics
 
 - Personal dashboard with comprehensive game statistics
 - High scores and win tracking across all games
 - Detailed game history with performance metrics
 - Achievement system infrastructure for future badges
 
-### 📚 Animal Quiz System
+### Animal Quiz System
 
 - Multi-level quiz structure with varying difficulty
 - Progress tracking across sessions
 - Score persistence and improvement tracking
 - Visual feedback for correct/incorrect answers
 
-### 🎨 Modern UI/UX
+### Modern UI/UX
 
 - Responsive design optimized for all devices
 - Tailwind CSS for modern, consistent styling
@@ -167,17 +175,70 @@ npm run dev
 3. **Access the application**
    Open your browser and navigate to `http://localhost:5173`
 
+## API Documentation
+
+### Authentication Endpoints (`/api/auth`)
+- `POST /api/auth/signup` - Register a new user
+  - Body: `{ name, email, password, age }`
+  - Returns: User object and JWT token
+- `POST /api/auth/login` - Authenticate user
+  - Body: `{ email, password }`
+  - Returns: User object and JWT token
+- `GET /api/auth/verifytoken` - Validate JWT token
+  - Headers: `Authorization: Bearer <token>`
+  - Returns: Token validity status
+
+### Dashboard Endpoints (`/api/dashboard`)
+- `GET /api/dashboard/:id` - Get user dashboard data
+  - Params: User ID
+  - Returns: User statistics, game history, badges
+
+### Game Endpoints (`/api/games`)
+- `POST /api/games/save` - Save game session (Feed the Animal)
+  - Body: Game session data
+  - Returns: Saved session ID
+- `GET /api/games/history` - Get user's game history
+  - Headers: `Authorization: Bearer <token>`
+  - Returns: Array of game sessions with statistics
+- `GET /api/games/result/:id` - Get game results by user ID
+  - Params: User ID
+  - Returns: Detailed game statistics
+- `POST /api/games/result` - Update game statistics
+  - Body: `{ userId, gameName, score, won }`
+  - Returns: Updated statistics
+
+## Testing
+
+### Test Coverage
+
+![Coverage](https://img.shields.io/badge/Frontend_Coverage-60%25+-brightgreen?style=flat-square)
+
+Our comprehensive test suite ensures code quality and reliability:
+
+- **Unit Tests**: All UI components (Button, Form, Input, Toast, etc.)
+- **Integration Tests**: Critical user flows and authentication
+- **Component Tests**: Game components and interactive elements
+- **Mock Testing**: External dependencies and API calls
+
 ### Running Tests
 
 ```bash
-# Frontend tests with coverage
+# Run tests in watch mode
 cd client
 npm test
+
+# Generate coverage report
 npm run test:coverage
 
-# View coverage report
+# View HTML coverage report in browser
 npm run test:coverage:view
 ```
+
+### Test Configuration
+- **Framework**: Jest 29.7 with React Testing Library
+- **Coverage Tool**: Istanbul
+- **Coverage Threshold**: 60%+ (and growing!)
+- **Test Files**: `*.test.js`, `*.spec.js`
 
 ### Building for Production
 
@@ -186,7 +247,7 @@ npm run test:coverage:view
 cd client
 npm run build
 
-# Preview production build
+# Preview production build locally
 npm run preview
 ```
 
