@@ -1,6 +1,6 @@
 # Animal World - Educational Gaming Platform 🦁🎮
 
-![![img_1.png](img_1.png)](img.png)
+![img_2.png](img_2.png)](img.png)
 
 ![React](https://img.shields.io/badge/React-18.2-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-20.x-339933?style=for-the-badge&logo=node.js&logoColor=white)
@@ -31,7 +31,8 @@
 
 ## Live Demo
 
-**Live Application**: [https://v54-tier3-team-36.onrender.com](https://v54-tier3-team-36.onrender.com)
+🌐 **Live Application
+**: [https://deploy-preview-48--v54-tier3-team-36.netlify.app/](https://deploy-preview-48--v54-tier3-team-36.netlify.app/)
 
 ## Description
 
@@ -178,34 +179,37 @@ npm run dev
 ## API Documentation
 
 ### Authentication Endpoints (`/api/auth`)
+
 - `POST /api/auth/signup` - Register a new user
-  - Body: `{ name, email, password, age }`
-  - Returns: User object and JWT token
+    - Body: `{ name, email, password, age }`
+    - Returns: User object and JWT token
 - `POST /api/auth/login` - Authenticate user
-  - Body: `{ email, password }`
-  - Returns: User object and JWT token
+    - Body: `{ email, password }`
+    - Returns: User object and JWT token
 - `GET /api/auth/verifytoken` - Validate JWT token
-  - Headers: `Authorization: Bearer <token>`
-  - Returns: Token validity status
+    - Headers: `Authorization: Bearer <token>`
+    - Returns: Token validity status
 
 ### Dashboard Endpoints (`/api/dashboard`)
+
 - `GET /api/dashboard/:id` - Get user dashboard data
-  - Params: User ID
-  - Returns: User statistics, game history, badges
+    - Params: User ID
+    - Returns: User statistics, game history, badges
 
 ### Game Endpoints (`/api/games`)
+
 - `POST /api/games/save` - Save game session (Feed the Animal)
-  - Body: Game session data
-  - Returns: Saved session ID
+    - Body: Game session data
+    - Returns: Saved session ID
 - `GET /api/games/history` - Get user's game history
-  - Headers: `Authorization: Bearer <token>`
-  - Returns: Array of game sessions with statistics
+    - Headers: `Authorization: Bearer <token>`
+    - Returns: Array of game sessions with statistics
 - `GET /api/games/result/:id` - Get game results by user ID
-  - Params: User ID
-  - Returns: Detailed game statistics
+    - Params: User ID
+    - Returns: Detailed game statistics
 - `POST /api/games/result` - Update game statistics
-  - Body: `{ userId, gameName, score, won }`
-  - Returns: Updated statistics
+    - Body: `{ userId, gameName, score, won }`
+    - Returns: Updated statistics
 
 ## Testing
 
@@ -235,6 +239,7 @@ npm run test:coverage:view
 ```
 
 ### Test Configuration
+
 - **Framework**: Jest 29.7 with React Testing Library
 - **Coverage Tool**: Istanbul
 - **Coverage Threshold**: 60%+ (and growing!)
@@ -318,18 +323,14 @@ This project was developed by an amazing team of 10 developers as part of Chingu
 - **Julie Cheng**: [GitHub](https://github.com/jucheng925) / [LinkedIn](https://www.linkedin.com/in/juliecheng925/)
 - **Jorge Alvarado**: [GitHub](https://github.com/alvarado08) / [LinkedIn](https://linkedin.com/in/jorgep-alvarado)
 - **Rika Miyata**: [GitHub](https://github.com/Tayrika) / [LinkedIn](https://www.linkedin.com/in/rika-miyata-4bab99243/)
-- **Aigul Yermagambetova
-  **: [GitHub](https://github.com/aigul-ermak) / [LinkedIn](https://www.linkedin.com/in/aigul-ermak/)
-- **Wataru Okada
-  **: [GitHub](https://github.com/WataTechJP) / [LinkedIn](https://www.linkedin.com/in/wataru-okada-509319334/)
+- **Aigul Yermagambetova**: [GitHub](https://github.com/aigul-ermak) / [LinkedIn](https://www.linkedin.com/in/aigul-ermak/)
+- **Wataru Okada**: [GitHub](https://github.com/WataTechJP) / [LinkedIn](https://www.linkedin.com/in/wataru-okada-509319334/)
 - **Adelola Abioye**: [GitHub](https://github.com/Adel-abio) / [LinkedIn](https://www.linkedin.com/in/adelola-abioye/)
-- **Ekaterina Kushnir
-  **: [GitHub](https://github.com/katiaku) / [LinkedIn](https://www.linkedin.com/in/ekaterina-kushnir-mikhaylova/)
-- **Deepali Sangole
-  **: [GitHub](https://github.com/ss-deep) / [LinkedIn](https://www.linkedin.com/in/deepali-sangole-49b0841b/)
+- **Ekaterina Kushnir**: [GitHub](https://github.com/katiaku) / [LinkedIn](https://www.linkedin.com/in/ekaterina-kushnir-mikhaylova/)
+- **Deepali Sangole**: [GitHub](https://github.com/ss-deep) / [LinkedIn](https://www.linkedin.com/in/deepali-sangole-49b0841b/)
 
 ---
 
 <div align="center">
-  Made with ❤️ by Team 36 - Chingu Voyage 54
+  Made with ❤️ by Team 40 - Chingu Voyage 56
 </div>
