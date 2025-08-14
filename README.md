@@ -97,6 +97,7 @@ flashcards.
 - **React Toastify** - Beautiful notifications
 - **Lucide React** - Modern icon library
 - **Jest & React Testing Library** - Testing with 60%+ coverage
+- **Jest-Axe** - Automated accessibility testing for React components
 
 ### Backend
 
@@ -223,6 +224,7 @@ Our comprehensive test suite ensures code quality and reliability:
 - **Integration Tests**: Critical user flows and authentication
 - **Component Tests**: Game components and interactive elements
 - **Mock Testing**: External dependencies and API calls
+- **Accessibility Tests**: Automated a11y checks using Jest-Axe to ensure WCAG compliance
 
 ### Running Tests
 
@@ -244,6 +246,7 @@ npm run test:coverage:view
 - **Coverage Tool**: Istanbul
 - **Coverage Threshold**: 60%+ (and growing!)
 - **Test Files**: `*.test.js`, `*.spec.js`
+- **Accessibility Testing**: Jest-Axe for automated accessibility checks
 
 ### Building for Production
 
