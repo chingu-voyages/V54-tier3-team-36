@@ -12,7 +12,6 @@ function FooterBottom() {
         </a>
       </div>
 
-      {/* Disclaimer */}
       <div className="text-center text-gray-400 mt-4 sm:mt-0">
         Disclaimer: This website and its associated services are provided for
         demonstrative and educational purposes only.
