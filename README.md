@@ -32,7 +32,7 @@
 ## Live Demo
 
 🌐 **Live Application
-**: [https://deploy-preview-48--v54-tier3-team-36.netlify.app/](https://deploy-preview-48--v54-tier3-team-36.netlify.app/)
+**: [https://deploy-preview-48--v54-tier3-team-36.netlify.app/](https://v54-tier3-team-36.netlify.app/)
 
 ## Description
 
